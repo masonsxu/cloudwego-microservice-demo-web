@@ -1,0 +1,3290 @@
+definitions:
+  AssignRoleToUserResponseDTO:
+    properties:
+      assignment_id:
+        description: '* 创建的分配记录ID'
+        type: string
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+    type: object
+  BaseResponseDTO:
+    properties:
+      code:
+        description: 错误码，0表示成功
+        type: integer
+      message:
+        description: 人类可读的提示信息
+        type: string
+    type: object
+  BatchBindUsersToRoleRequestDTO:
+    properties:
+      user_ids:
+        description: '* 用户ID列表'
+        items:
+          type: string
+        type: array
+    type: object
+  BatchBindUsersToRoleResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      message:
+        description: '* 响应消息'
+        type: string
+      success:
+        description: '* 操作是否成功'
+        type: boolean
+      success_count:
+        description: '* 成功绑定的用户数量'
+        type: integer
+    type: object
+  BindLogoToOrganizationRequestDTO:
+    properties:
+      logo_id:
+        description: '* Logo ID'
+        type: string
+    type: object
+  ChangePasswordRequestDTO:
+    properties:
+      new_password:
+        description: '* 新密码'
+        type: string
+      old_password:
+        description: '* 当前密码'
+        type: string
+    type: object
+  ChangeUserStatusRequestDTO:
+    properties:
+      new_status:
+        description: '* 新状态'
+        type: integer
+      reason:
+        description: '* 修改原因'
+        type: string
+    type: object
+  ConfigureRoleMenusRequestDTO:
+    properties:
+      menu_configs:
+        description: '* 菜单权限配置列表'
+        items:
+          $ref: '#/definitions/MenuConfigDTO'
+        type: array
+    type: object
+  ConfigureRoleMenusResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      message:
+        description: '* 响应消息'
+        type: string
+      success:
+        description: '* 配置成功标志'
+        type: boolean
+    type: object
+  CreateDepartmentRequestDTO:
+    properties:
+      department_type:
+        description: '* 部门类型'
+        type: string
+      name:
+        description: '* 部门名称'
+        type: string
+      organization_id:
+        description: '* 所属组织ID'
+        type: string
+    type: object
+  CreateOrganizationRequestDTO:
+    properties:
+      accreditation_status:
+        description: '* 认证状态'
+        type: string
+      facility_type:
+        description: '* 机构类型'
+        type: string
+      name:
+        description: '* 组织名称'
+        type: string
+      parent_id:
+        description: '* 父组织ID（可选）'
+        type: string
+      province_city:
+        description: '* 所在省市列表'
+        items:
+          type: string
+        type: array
+    type: object
+  CreateUserRequestDTO:
+    properties:
+      account_expiry:
+        description: '* 账户过期时间'
+        type: integer
+      email:
+        description: '* 邮箱地址'
+        type: string
+      employee_id:
+        description: '* 员工工号'
+        type: string
+      first_name:
+        description: '* 名'
+        type: string
+      gender:
+        description: '* 性别（非必填，0:未知, 1:男, 2:女）'
+        type: integer
+      last_name:
+        description: '* 姓'
+        type: string
+      license_number:
+        description: '* 执业证书号'
+        type: string
+      must_change_password:
+        description: '* 是否必须在下次登录时修改密码'
+        type: boolean
+      organization_id:
+        description: '* 组织ID'
+        type: string
+      password:
+        description: '* 密码'
+        type: string
+      phone:
+        description: '* 手机号码'
+        type: string
+      professional_title:
+        description: '* 职业头衔'
+        type: string
+      real_name:
+        description: '* 真实姓名'
+        type: string
+      role_ids:
+        description: '* 角色ID列表'
+        items:
+          type: string
+        type: array
+      specialties:
+        description: '* 专业特长列表'
+        items:
+          type: string
+        type: array
+      username:
+        description: '* 用户名'
+        type: string
+    type: object
+  DeleteDepartmentRequestDTO:
+    type: object
+  DeleteOrganizationRequestDTO:
+    type: object
+  DeleteUserRequestDTO:
+    properties:
+      reason:
+        description: '* 删除原因'
+        type: string
+    type: object
+  DepartmentDTO:
+    properties:
+      available_equipment:
+        description: '* 可用设备列表'
+        items:
+          type: string
+        type: array
+      code:
+        description: '* 部门代码'
+        type: string
+      created_at:
+        description: '* 创建时间'
+        type: integer
+      department_type:
+        description: '* 部门类型'
+        type: string
+      id:
+        description: '* 部门唯一标识符'
+        type: string
+      member_count:
+        description: '* 成员数量'
+        type: integer
+      name:
+        description: '* 部门名称'
+        type: string
+      organization:
+        allOf:
+        - $ref: '#/definitions/OrganizationDTO'
+        description: |-
+          关联信息
+          * 所属组织信息
+      organization_id:
+        description: '* 所属组织ID'
+        type: string
+      updated_at:
+        description: '* 更新时间'
+        type: integer
+    type: object
+  DepartmentResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      department:
+        allOf:
+        - $ref: '#/definitions/DepartmentDTO'
+        description: '* 部门信息'
+    type: object
+  ForcePasswordChangeRequestDTO:
+    properties:
+      reason:
+        description: '* 强制修改原因'
+        type: string
+      user_id:
+        description: '* 目标用户ID'
+        type: string
+    type: object
+  GetMenuTreeResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      menu_tree:
+        description: '* 完整的菜单树结构'
+        items:
+          $ref: '#/definitions/MenuNodeDTO'
+        type: array
+    type: object
+  GetOrganizationDepartmentsResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      departments:
+        description: '* 部门列表'
+        items:
+          $ref: '#/definitions/DepartmentDTO'
+        type: array
+      page:
+        allOf:
+        - $ref: '#/definitions/PageResponseDTO'
+        description: '* 分页信息'
+    type: object
+  GetPrimaryMembershipRequestDTO:
+    properties:
+      user_id:
+        description: '* 用户ID'
+        type: string
+    type: object
+  GetRoleMenuPermissionsResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      permissions:
+        description: '* 角色的菜单权限列表'
+        items:
+          $ref: '#/definitions/MenuPermissionDTO'
+        type: array
+      role_id:
+        description: '* 角色ID'
+        type: string
+    type: object
+  GetRoleMenuTreeResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      menu_tree:
+        description: '* 角色可访问的菜单树'
+        items:
+          $ref: '#/definitions/MenuNodeDTO'
+        type: array
+      role_id:
+        description: '* 角色ID'
+        type: string
+    type: object
+  GetUserMembershipsResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      memberships:
+        description: '* 成员关系列表'
+        items:
+          $ref: '#/definitions/UserMembershipDTO'
+        type: array
+      page:
+        allOf:
+        - $ref: '#/definitions/PageResponseDTO'
+        description: '* 分页信息'
+    type: object
+  GetUserMenuTreeResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      menu_tree:
+        description: '* 用户可访问的菜单树'
+        items:
+          $ref: '#/definitions/MenuNodeDTO'
+        type: array
+      role_ids:
+        description: '* 用户拥有的角色列表'
+        items:
+          type: string
+        type: array
+      user_id:
+        description: '* 用户ID'
+        type: string
+    type: object
+  GetUsersByRoleResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      role_id:
+        description: '* 角色ID'
+        type: string
+      user_ids:
+        description: '* 该角色下所有用户的ID列表'
+        items:
+          type: string
+        type: array
+    type: object
+  HasMenuPermissionRequestDTO:
+    properties:
+      menu_id:
+        description: '* 菜单ID'
+        type: string
+      permission:
+        description: '* 权限类型'
+        type: string
+    type: object
+  HasMenuPermissionResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      has_permission:
+        description: '* 是否具有权限'
+        type: boolean
+      menu_id:
+        description: '* 菜单ID'
+        type: string
+      permission:
+        description: '* 权限类型'
+        type: string
+      role_id:
+        description: '* 角色ID'
+        type: string
+    type: object
+  ListOrganizationsResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      organizations:
+        description: '* 组织列表'
+        items:
+          $ref: '#/definitions/OrganizationDTO'
+        type: array
+      page:
+        allOf:
+        - $ref: '#/definitions/PageResponseDTO'
+        description: '* 分页信息'
+    type: object
+  ListUsersResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      page:
+        allOf:
+        - $ref: '#/definitions/PageResponseDTO'
+        description: '* 分页信息'
+      users:
+        description: '* 用户列表'
+        items:
+          $ref: '#/definitions/UserProfileDTO'
+        type: array
+    type: object
+  LoginRequestDTO:
+    properties:
+      password:
+        description: '* 密码'
+        type: string
+      username:
+        description: '* 用户名'
+        type: string
+    type: object
+  LoginResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      memberships:
+        description: '* 用户成员关系列表'
+        items:
+          $ref: '#/definitions/UserMembershipDTO'
+        type: array
+      menu_tree:
+        description: '* 用户菜单树（新增字段，推荐使用）'
+        items:
+          $ref: '#/definitions/MenuNodeDTO'
+        type: array
+      role_ids:
+        description: '* 用户角色ID列表'
+        items:
+          type: string
+        type: array
+      token_info:
+        allOf:
+        - $ref: '#/definitions/TokenInfoDTO'
+        description: '* 访问令牌信息'
+      user_profile:
+        allOf:
+        - $ref: '#/definitions/UserProfileDTO'
+        description: '* 用户个人信息'
+    type: object
+  LogoutRequestDTO:
+    properties:
+      refresh_token:
+        description: '* 刷新令牌（可选，用于撤销）'
+        type: string
+    type: object
+  MenuConfigDTO:
+    properties:
+      menu_id:
+        description: '* 菜单ID'
+        type: string
+      permission:
+        description: '* 权限类型: read, write, full, none'
+        type: string
+    type: object
+  MenuNodeDTO:
+    properties:
+      children:
+        description: '* 子菜单列表 (可选)'
+        items:
+          $ref: '#/definitions/MenuNodeDTO'
+        type: array
+      component:
+        description: '* 前端组件路径 (可选)'
+        type: string
+      has_permission:
+        description: '* 是否有权限访问此菜单 (可选, 用于权限标记)'
+        type: boolean
+      icon:
+        description: '* 菜单图标 (可选)'
+        type: string
+      id:
+        description: '* 菜单唯一标识符'
+        type: string
+      name:
+        description: '* 菜单名称 (用于显示)'
+        type: string
+      path:
+        description: '* 路由路径'
+        type: string
+      permission_level:
+        description: '* 权限级别 (可选): read, write, full, none'
+        type: string
+    type: object
+  MenuPermissionDTO:
+    properties:
+      menu_id:
+        description: '* 菜单ID'
+        type: string
+      permission:
+        description: '* 权限类型: read, write, full, none'
+        type: string
+    type: object
+  OperationStatusResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: 基础响应信息
+    type: object
+  OrganizationDTO:
+    properties:
+      accreditation_status:
+        description: '* 认证状态'
+        type: string
+      children:
+        description: '* 子组织列表'
+        items:
+          $ref: '#/definitions/OrganizationDTO'
+        type: array
+      code:
+        description: '* 组织代码'
+        type: string
+      created_at:
+        description: '* 创建时间'
+        type: integer
+      department_count:
+        description: '* 部门数量'
+        type: integer
+      facility_type:
+        description: '* 机构类型'
+        type: string
+      id:
+        description: '* 组织唯一标识符'
+        type: string
+      logo:
+        description: '* 组织Logo地址'
+        type: string
+      logo_id:
+        description: '* 绑定的Logo ID'
+        type: string
+      member_count:
+        description: '* 成员数量'
+        type: integer
+      name:
+        description: '* 组织名称'
+        type: string
+      parent:
+        allOf:
+        - $ref: '#/definitions/OrganizationDTO'
+        description: |-
+          关联信息
+          * 父组织信息
+      parent_id:
+        description: '* 父组织ID'
+        type: string
+      province_city:
+        description: '* 所在省市列表'
+        items:
+          type: string
+        type: array
+      updated_at:
+        description: '* 更新时间'
+        type: integer
+    type: object
+  OrganizationLogoDTO:
+    properties:
+      bound_organization_id:
+        description: '* 绑定的组织ID（临时状态时为空）'
+        type: string
+      created_at:
+        description: '* 创建时间'
+        type: integer
+      download_url:
+        description: '* 下载URL（预签名URL）'
+        type: string
+      expires_at:
+        description: '* 过期时间（临时状态）'
+        type: integer
+      file_id:
+        description: '* 文件存储ID（S3路径: bucket/key）'
+        type: string
+      file_name:
+        description: '* 原始文件名'
+        type: string
+      file_size:
+        description: '* 文件大小（字节）'
+        type: integer
+      id:
+        description: '* Logo唯一标识符'
+        type: string
+      mime_type:
+        description: '* MIME类型'
+        type: string
+      status:
+        description: '* Logo状态（TEMPORARY=临时, BOUND=已绑定, DELETED=已删除）'
+        type: string
+      updated_at:
+        description: '* 更新时间'
+        type: integer
+      uploaded_by:
+        description: '* 上传者ID'
+        type: string
+    type: object
+  OrganizationLogoResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      logo:
+        allOf:
+        - $ref: '#/definitions/OrganizationLogoDTO'
+        description: '* Logo信息'
+    type: object
+  OrganizationResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      organization:
+        allOf:
+        - $ref: '#/definitions/OrganizationDTO'
+        description: '* 组织信息'
+    type: object
+  PageResponseDTO:
+    properties:
+      has_next:
+        description: 是否有下一页
+        type: boolean
+      has_prev:
+        description: 是否有上一页
+        type: boolean
+      limit:
+        description: 每页数量
+        type: integer
+      page:
+        description: 当前页码
+        type: integer
+      total:
+        description: 总记录数
+        type: integer
+      total_pages:
+        description: 总页数
+        type: integer
+    type: object
+  PermissionDTO:
+    properties:
+      action:
+        description: '* 对资源执行的操作'
+        type: string
+      description:
+        description: '* 权限描述'
+        type: string
+      resource:
+        description: '* 权限作用的资源'
+        type: string
+    type: object
+  RefreshTokenRequestDTO:
+    properties:
+      refresh_token:
+        description: '* 刷新令牌'
+        type: string
+    type: object
+  RefreshTokenResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      token_info:
+        allOf:
+        - $ref: '#/definitions/TokenInfoDTO'
+        description: '* 新的令牌信息'
+    type: object
+  ResetPasswordRequestDTO:
+    properties:
+      new_password:
+        description: '* 新密码（可选，为空时系统生成）'
+        type: string
+      reset_reason:
+        description: '* 重置原因'
+        type: string
+      user_id:
+        description: '* 目标用户ID'
+        type: string
+    type: object
+  RoleDefinitionCreateRequestDTO:
+    properties:
+      description:
+        description: '* 角色描述'
+        type: string
+      is_system_role:
+        description: '* 是否为系统内置角色'
+        type: boolean
+      name:
+        description: '* 角色唯一名称 (英文，用于程序识别)'
+        type: string
+      permissions:
+        description: '* 角色包含的权限列表'
+        items:
+          $ref: '#/definitions/PermissionDTO'
+        type: array
+    type: object
+  RoleDefinitionCreateResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      role:
+        allOf:
+        - $ref: '#/definitions/RoleDefinitionDTO'
+        description: '* 创建成功的角色定义信息'
+    type: object
+  RoleDefinitionDTO:
+    properties:
+      created_at:
+        description: '* 创建时间'
+        type: integer
+      created_by:
+        description: '* 创建者用户ID'
+        type: string
+      description:
+        description: '* 角色详细描述'
+        type: string
+      id:
+        description: '* 角色唯一ID'
+        type: string
+      is_system_role:
+        description: '* 是否为系统内置角色，不可删除'
+        type: boolean
+      name:
+        description: '* 角色唯一名称 (中文，页面展示使用)'
+        type: string
+      permissions:
+        description: '* 该角色拥有的权限列表'
+        items:
+          $ref: '#/definitions/PermissionDTO'
+        type: array
+      status:
+        description: '* 角色状态'
+        type: integer
+      updated_at:
+        description: '* 最后更新时间'
+        type: integer
+      updated_by:
+        description: '* 更新者用户ID'
+        type: string
+      user_count:
+        description: '* 当前角色绑定的用户数量（非持久化字段，查询时动态计算）'
+        type: integer
+    type: object
+  RoleDefinitionGetResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      role:
+        allOf:
+        - $ref: '#/definitions/RoleDefinitionDTO'
+        description: '* 角色定义信息'
+    type: object
+  RoleDefinitionListResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      page:
+        allOf:
+        - $ref: '#/definitions/PageResponseDTO'
+        description: '* 分页响应参数'
+      roles:
+        description: '* 角色定义列表'
+        items:
+          $ref: '#/definitions/RoleDefinitionDTO'
+        type: array
+    type: object
+  RoleDefinitionUpdateRequestDTO:
+    properties:
+      description:
+        description: '* 角色描述'
+        type: string
+      name:
+        description: '* 角色名称'
+        type: string
+      permissions:
+        description: '* 权限列表'
+        items:
+          $ref: '#/definitions/PermissionDTO'
+        type: array
+      status:
+        description: '* 角色状态'
+        type: integer
+    type: object
+  RoleDefinitionUpdateResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      role:
+        allOf:
+        - $ref: '#/definitions/RoleDefinitionDTO'
+        description: '* 更新后的角色定义信息'
+    type: object
+  SearchUsersResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      page:
+        allOf:
+        - $ref: '#/definitions/PageResponseDTO'
+        description: '* 分页信息'
+      users:
+        description: '* 用户列表'
+        items:
+          $ref: '#/definitions/UserProfileDTO'
+        type: array
+    type: object
+  TokenInfoDTO:
+    properties:
+      access_token:
+        description: 访问令牌
+        type: string
+      expires_in:
+        description: 访问令牌过期时间（秒）
+        type: integer
+      token_type:
+        description: 令牌类型（通常是"Bearer"）
+        type: string
+    type: object
+  UnlockUserRequestDTO:
+    type: object
+  UpdateDepartmentRequestDTO:
+    properties:
+      department_type:
+        description: '* 部门类型'
+        type: string
+      name:
+        description: '* 部门名称'
+        type: string
+    type: object
+  UpdateMeRequestDTO:
+    properties:
+      account_expiry:
+        description: '* 账户过期时间'
+        type: integer
+      email:
+        description: '* 邮箱地址'
+        type: string
+      employee_id:
+        description: '* 员工工号'
+        type: string
+      first_name:
+        description: '* 名'
+        type: string
+      gender:
+        description: '* 性别'
+        type: integer
+      last_name:
+        description: '* 姓'
+        type: string
+      medical_license_number:
+        description: '* 许可证号'
+        type: string
+      phone:
+        description: '* 手机号码'
+        type: string
+      professional_title:
+        description: '* 职业头衔'
+        type: string
+      real_name:
+        description: '* 真实姓名'
+        type: string
+      specialties:
+        description: '* 专业特长列表'
+        items:
+          type: string
+        type: array
+      version:
+        description: '* 乐观锁版本号'
+        type: integer
+    type: object
+  UpdateOrganizationRequestDTO:
+    properties:
+      accreditation_status:
+        description: '* 认证状态'
+        type: string
+      facility_type:
+        description: '* 机构类型'
+        type: string
+      name:
+        description: '* 组织名称'
+        type: string
+      parent_id:
+        description: '* 父组织ID'
+        type: string
+      province_city:
+        description: '* 所在省市列表'
+        items:
+          type: string
+        type: array
+    type: object
+  UpdateUserRequestDTO:
+    properties:
+      account_expiry:
+        description: '* 账户过期时间'
+        type: integer
+      email:
+        description: '* 邮箱地址'
+        type: string
+      employee_id:
+        description: '* 员工工号'
+        type: string
+      first_name:
+        description: '* 名'
+        type: string
+      gender:
+        description: '* 性别'
+        type: integer
+      last_name:
+        description: '* 姓'
+        type: string
+      license_number:
+        description: '* 执业证书号'
+        type: string
+      organization_id:
+        description: '* 组织ID'
+        type: string
+      phone:
+        description: '* 手机号码'
+        type: string
+      professional_title:
+        description: '* 职业头衔'
+        type: string
+      real_name:
+        description: '* 真实姓名'
+        type: string
+      role_ids:
+        description: '* 角色ID列表'
+        items:
+          type: string
+        type: array
+      specialties:
+        description: '* 专业特长列表'
+        items:
+          type: string
+        type: array
+      version:
+        description: '* 乐观锁版本号'
+        type: integer
+    type: object
+  UserMembershipDTO:
+    properties:
+      created_at:
+        description: '* 创建时间'
+        type: integer
+      department:
+        allOf:
+        - $ref: '#/definitions/DepartmentDTO'
+        description: '* 所属部门信息'
+      department_id:
+        description: '* 部门ID（可选）'
+        type: string
+      id:
+        description: '* 成员关系唯一标识符'
+        type: string
+      is_primary:
+        description: '* 是否为主要成员关系'
+        type: boolean
+      organization:
+        allOf:
+        - $ref: '#/definitions/OrganizationDTO'
+        description: |-
+          关联信息
+          * 所属组织信息
+      organization_id:
+        description: '* 组织ID'
+        type: string
+      updated_at:
+        description: '* 更新时间'
+        type: integer
+      user_id:
+        description: '* 用户ID'
+        type: string
+    type: object
+  UserMembershipResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      membership:
+        allOf:
+        - $ref: '#/definitions/UserMembershipDTO'
+        description: '* 成员关系信息'
+    type: object
+  UserProfileDTO:
+    properties:
+      account_expiry:
+        description: '* 账户过期时间'
+        type: integer
+      created_at:
+        description: '* 创建时间'
+        type: integer
+      created_by:
+        description: '* 创建者用户ID'
+        type: string
+      email:
+        description: '* 邮箱地址'
+        type: string
+      employee_id:
+        description: '* 员工工号'
+        type: string
+      first_name:
+        description: '* 名'
+        type: string
+      gender:
+        description: '* 性别'
+        type: integer
+      id:
+        description: '* 用户唯一标识符'
+        type: string
+      last_login_time:
+        description: '* 最后登录时间'
+        type: integer
+      last_name:
+        description: '* 姓'
+        type: string
+      license_number:
+        description: '* 执业证书号'
+        type: string
+      login_attempts:
+        description: '* 连续登录失败次数'
+        type: integer
+      must_change_password:
+        description: '* 是否必须修改密码'
+        type: boolean
+      phone:
+        description: '* 手机号码'
+        type: string
+      primary_department_id:
+        description: '* 主部门ID'
+        type: string
+      primary_organization_id:
+        description: '* 主组织ID'
+        type: string
+      professional_title:
+        description: '* 职业头衔'
+        type: string
+      real_name:
+        description: '* 真实姓名'
+        type: string
+      role_ids:
+        description: '* 用户角色ID列表'
+        items:
+          type: string
+        type: array
+      specialties:
+        description: '* 专业特长列表'
+        items:
+          type: string
+        type: array
+      status:
+        description: '* 用户状态'
+        type: integer
+      updated_at:
+        description: '* 更新时间'
+        type: integer
+      updated_by:
+        description: '* 最后更新者用户ID'
+        type: string
+      username:
+        description: '* 用户名（登录名）'
+        type: string
+      version:
+        description: '* 乐观锁版本号'
+        type: integer
+    type: object
+  UserProfileResponseDTO:
+    properties:
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 基础响应信息'
+      user:
+        allOf:
+        - $ref: '#/definitions/UserProfileDTO'
+        description: '* 用户个人信息'
+    type: object
+  UserRoleAssignmentDTO:
+    properties:
+      created_at:
+        description: '* 创建时间'
+        type: integer
+      created_by:
+        description: '* 创建者用户ID'
+        type: string
+      id:
+        description: '* 分配记录的唯一ID'
+        type: string
+      role_id:
+        description: '* 分配的角色ID (对应 RoleDefinition.id)'
+        type: string
+      updated_at:
+        description: '* 最后更新时间'
+        type: integer
+      updated_by:
+        description: '* 更新者用户ID'
+        type: string
+      user_id:
+        description: '* 被分配角色的用户ID'
+        type: string
+    type: object
+  UserRoleListResponseDTO:
+    properties:
+      assignments:
+        description: '* 用户角色分配列表'
+        items:
+          $ref: '#/definitions/UserRoleAssignmentDTO'
+        type: array
+      base_resp:
+        allOf:
+        - $ref: '#/definitions/BaseResponseDTO'
+        description: '* 响应状态码'
+      page:
+        allOf:
+        - $ref: '#/definitions/PageResponseDTO'
+        description: '* 分页响应参数'
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/identity/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: 验证用户凭据并返回访问令牌和用户信息
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/LoginResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      summary: 用户登录
+      tags:
+      - 认证管理
+  /api/v1/identity/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: 注销当前会话并使令牌失效
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/LogoutRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      summary: 用户登出
+      tags:
+      - 认证管理
+  /api/v1/identity/auth/password:
+    put:
+      consumes:
+      - application/json
+      description: 用户修改自己的密码（需要提供旧密码）
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ChangePasswordRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改密码
+      tags:
+      - 认证管理
+  /api/v1/identity/auth/password/force-change:
+    put:
+      consumes:
+      - application/json
+      description: 管理员标记用户需要在下次登录时强制修改密码
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ForcePasswordChangeRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 强制下次登录修改密码
+      tags:
+      - 认证管理
+  /api/v1/identity/auth/password/reset:
+    post:
+      consumes:
+      - application/json
+      description: 管理员重置用户密码（管理员权限）
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ResetPasswordRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 重置密码
+      tags:
+      - 认证管理
+  /api/v1/identity/auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: 使用刷新令牌获取新的访问令牌
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/RefreshTokenRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/RefreshTokenResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      summary: 刷新访问令牌
+      tags:
+      - 认证管理
+  /api/v1/identity/departments:
+    post:
+      consumes:
+      - application/json
+      description: 在指定组织下创建新部门
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/CreateDepartmentRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/DepartmentResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建部门
+      tags:
+      - 部门管理
+  /api/v1/identity/departments/{departmentID}:
+    delete:
+      consumes:
+      - application/json
+      description: 软删除指定部门
+      parameters:
+      - description: 部门ID
+        in: path
+        name: departmentID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteDepartmentRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 部门未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除部门
+      tags:
+      - 部门管理
+    get:
+      consumes:
+      - application/json
+      description: 根据部门ID获取部门详细信息
+      parameters:
+      - description: 部门ID
+        in: path
+        name: departmentID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/DepartmentResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 部门未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取部门信息
+      tags:
+      - 部门管理
+    put:
+      consumes:
+      - application/json
+      description: 更新指定部门的信息
+      parameters:
+      - description: 部门ID
+        in: path
+        name: departmentID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateDepartmentRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/DepartmentResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 部门未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新部门信息
+      tags:
+      - 部门管理
+  /api/v1/identity/organization-logos/{logoID}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除Logo文件和数据库记录（软删除），同时删除S3存储的文件
+      parameters:
+      - description: Logo ID
+        in: path
+        name: logoID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: Logo未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Logo
+      tags:
+      - 组织管理
+    get:
+      consumes:
+      - application/json
+      description: 根据Logo ID获取Logo元数据和预签名下载URL（有效期7天）
+      parameters:
+      - description: Logo ID
+        in: path
+        name: logoID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OrganizationLogoResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: Logo未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取Logo信息
+      tags:
+      - 组织管理
+  /api/v1/identity/organization-logos/temporary:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传组织Logo文件到临时存储（7天后自动过期），返回Logo元数据和预签名下载URL
+      parameters:
+      - description: 文件名
+        in: formData
+        name: file_name
+        required: true
+        type: string
+      - description: 文件内容
+        in: formData
+        name: file_content
+        required: true
+        type: file
+      - description: MIME类型
+        in: formData
+        name: mime_type
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OrganizationLogoResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "413":
+          description: 文件过大
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "415":
+          description: 不支持的文件类型
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 上传临时Logo
+      tags:
+      - 组织管理
+  /api/v1/identity/organizations:
+    get:
+      consumes:
+      - application/json
+      description: 分页查询组织列表，支持按父组织筛选
+      parameters:
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量
+        in: query
+        name: limit
+        type: integer
+      - description: 搜索关键词
+        in: query
+        name: search
+        type: string
+      - description: 字段级过滤
+        in: query
+        name: filter
+        type: string
+      - description: 排序规则
+        in: query
+        name: sort
+        type: string
+      - description: 指定返回字段
+        in: query
+        name: fields
+        type: string
+      - default: false
+        description: 是否返回总数
+        in: query
+        name: include_total
+        type: boolean
+      - description: 按父组织ID筛选
+        in: query
+        name: parent_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/ListOrganizationsResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取组织列表
+      tags:
+      - 组织管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的组织机构
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/CreateOrganizationRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OrganizationResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建组织
+      tags:
+      - 组织管理
+  /api/v1/identity/organizations/{organizationID}:
+    delete:
+      consumes:
+      - application/json
+      description: 软删除指定组织
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteOrganizationRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 组织未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除组织
+      tags:
+      - 组织管理
+    get:
+      consumes:
+      - application/json
+      description: 根据组织ID获取组织详细信息
+      parameters:
+      - description: 组织ID
+        in: path
+        name: organizationID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OrganizationResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 组织未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取组织信息
+      tags:
+      - 组织管理
+    put:
+      consumes:
+      - application/json
+      description: 更新指定组织的信息
+      parameters:
+      - description: 组织ID
+        in: path
+        name: organizationID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateOrganizationRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OrganizationResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 组织未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新组织信息
+      tags:
+      - 组织管理
+  /api/v1/identity/organizations/{organizationID}/departments:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定组织下的所有部门
+      parameters:
+      - description: 组织ID
+        in: path
+        name: organizationID
+        required: true
+        type: string
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量
+        in: query
+        name: limit
+        type: integer
+      - description: 搜索关键词
+        in: query
+        name: search
+        type: string
+      - description: 字段级过滤
+        in: query
+        name: filter
+        type: string
+      - description: 排序规则
+        in: query
+        name: sort
+        type: string
+      - description: 指定返回字段
+        in: query
+        name: fields
+        type: string
+      - default: false
+        description: 是否返回总数
+        in: query
+        name: include_total
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/GetOrganizationDepartmentsResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 组织未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取组织部门列表
+      tags:
+      - 部门管理
+  /api/v1/identity/organizations/{organizationID}/logo:
+    put:
+      consumes:
+      - application/json
+      description: 将临时Logo绑定到组织，Logo状态从临时变更为永久保存，并更新组织的Logo信息
+      parameters:
+      - description: 组织ID
+        in: path
+        name: organizationID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/BindLogoToOrganizationRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OrganizationResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: Logo或组织未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 绑定Logo到组织
+      tags:
+      - 组织管理
+  /api/v1/identity/users:
+    get:
+      consumes:
+      - application/json
+      description: 分页查询用户列表，支持按组织、状态等条件筛选
+      parameters:
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量
+        in: query
+        name: limit
+        type: integer
+      - description: 搜索关键词
+        in: query
+        name: search
+        type: string
+      - description: 字段级过滤
+        in: query
+        name: filter
+        type: string
+      - description: 排序规则
+        in: query
+        name: sort
+        type: string
+      - description: 指定返回字段
+        in: query
+        name: fields
+        type: string
+      - default: false
+        description: 是否返回总数
+        in: query
+        name: include_total
+        type: boolean
+      - description: 按组织ID筛选
+        in: query
+        name: organization_id
+        type: string
+      - description: 按用户状态筛选
+        in: query
+        name: status
+        type: integer
+      - default: false
+        description: 是否获取所有数据（不分页）
+        in: query
+        name: fetch_all
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/ListUsersResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户列表
+      tags:
+      - 用户管理
+    post:
+      consumes:
+      - application/json
+      description: 管理员创建新用户账户
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/CreateUserRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/UserProfileResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建用户
+      tags:
+      - 用户管理
+  /api/v1/identity/users/{userID}:
+    delete:
+      consumes:
+      - application/json
+      description: 软删除指定用户（管理员权限）
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        schema:
+          $ref: '#/definitions/DeleteUserRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 用户未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
+      tags:
+      - 用户管理
+    get:
+      consumes:
+      - application/json
+      description: 根据用户ID获取用户详细信息
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/UserProfileResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 用户未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
+      tags:
+      - 用户管理
+    put:
+      consumes:
+      - application/json
+      description: 更新指定用户的基本信息
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUserRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/UserProfileResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 用户未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户信息
+      tags:
+      - 用户管理
+  /api/v1/identity/users/{userID}/memberships:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的所有组织成员关系
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量
+        in: query
+        name: limit
+        type: integer
+      - description: 搜索关键词
+        in: query
+        name: search
+        type: string
+      - description: 字段级过滤
+        in: query
+        name: filter
+        type: string
+      - description: 排序规则
+        in: query
+        name: sort
+        type: string
+      - description: 指定返回字段
+        in: query
+        name: fields
+        type: string
+      - default: false
+        description: 是否返回总数
+        in: query
+        name: include_total
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/GetUserMembershipsResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 用户未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户成员关系
+      tags:
+      - 成员关系管理
+  /api/v1/identity/users/{userID}/primary-membership:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的主成员关系
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/GetPrimaryMembershipRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/UserMembershipResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 主成员关系未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户主成员关系
+      tags:
+      - 成员关系管理
+  /api/v1/identity/users/{userID}/status:
+    put:
+      consumes:
+      - application/json
+      description: 管理员变更用户状态（激活、停用、锁定等）
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ChangeUserStatusRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 用户未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 变更用户状态
+      tags:
+      - 用户管理
+  /api/v1/identity/users/{userID}/unlock:
+    put:
+      consumes:
+      - application/json
+      description: 管理员解锁被锁定的用户
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/UnlockUserRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "403":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 用户未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 解锁用户
+      tags:
+      - 用户管理
+  /api/v1/identity/users/me:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前登录用户的详细信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/UserProfileResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取当前用户信息
+      tags:
+      - 用户管理
+    put:
+      consumes:
+      - application/json
+      description: 用户更新自己的基本信息（从认证上下文获取用户ID）
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateMeRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/UserProfileResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新当前用户信息
+      tags:
+      - 用户管理
+  /api/v1/identity/users/search:
+    get:
+      consumes:
+      - application/json
+      description: 按关键词搜索用户
+      parameters:
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量
+        in: query
+        name: limit
+        type: integer
+      - description: 搜索关键词
+        in: query
+        name: search
+        type: string
+      - description: 字段级过滤
+        in: query
+        name: filter
+        type: string
+      - description: 排序规则
+        in: query
+        name: sort
+        type: string
+      - description: 指定返回字段
+        in: query
+        name: fields
+        type: string
+      - default: false
+        description: 是否返回总数
+        in: query
+        name: include_total
+        type: boolean
+      - description: 按组织ID筛选
+        in: query
+        name: organization_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/SearchUsersResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 搜索用户
+      tags:
+      - 用户管理
+  /api/v1/permission/menu/tree:
+    get:
+      consumes:
+      - application/json
+      description: 获取完整的菜单树结构，用于前端展示导航菜单预览
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回菜单树结构
+          schema:
+            $ref: '#/definitions/GetMenuTreeResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取菜单树结构
+      tags:
+      - 菜单权限管理
+  /api/v1/permission/menu/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传YAML格式的菜单配置文件，用于更新系统菜单
+      parameters:
+      - description: YAML格式的菜单配置文件
+        in: formData
+        name: menu_file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 菜单上传成功
+          schema:
+            $ref: '#/definitions/GetMenuTreeResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 上传菜单配置文件
+      tags:
+      - 菜单权限管理
+  /api/v1/permission/roles:
+    get:
+      consumes:
+      - application/json
+      description: 分页列出角色定义
+      parameters:
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量
+        in: query
+        name: limit
+        type: integer
+      - description: 搜索关键词
+        in: query
+        name: search
+        type: string
+      - description: 字段级过滤
+        in: query
+        name: filter
+        type: string
+      - description: 排序规则
+        in: query
+        name: sort
+        type: string
+      - description: 指定返回字段
+        in: query
+        name: fields
+        type: string
+      - default: false
+        description: 是否返回总数
+        in: query
+        name: include_total
+        type: boolean
+      - description: 角色名称
+        in: query
+        name: name
+        type: string
+      - description: 角色状态
+        in: query
+        name: status
+        type: string
+      - description: 是否为系统角色
+        in: query
+        name: is_system_role
+        type: boolean
+      - default: false
+        description: 是否获取所有数据（不分页）
+        in: query
+        name: fetch_all
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/RoleDefinitionListResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 列出角色定义
+      tags:
+      - 权限管理
+    post:
+      consumes:
+      - application/json
+      description: 创建一个新的角色定义
+      parameters:
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/RoleDefinitionCreateRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/RoleDefinitionCreateResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建角色定义
+      tags:
+      - 权限管理
+  /api/v1/permission/roles/{roleDefinitionID}:
+    put:
+      consumes:
+      - application/json
+      description: 更新指定角色定义的信息
+      parameters:
+      - description: 角色定义ID
+        in: path
+        name: roleDefinitionID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/RoleDefinitionUpdateRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/RoleDefinitionUpdateResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新角色定义
+      tags:
+      - 权限管理
+  /api/v1/permission/roles/{roleID}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除一个角色定义
+      parameters:
+      - description: 角色ID
+        in: path
+        name: roleID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 角色未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除角色定义
+      tags:
+      - 权限管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取角色定义
+      parameters:
+      - description: 角色ID
+        in: path
+        name: roleID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/RoleDefinitionGetResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 角色未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取角色定义
+      tags:
+      - 权限管理
+  /api/v1/permission/roles/{roleID}/check-menu-permission:
+    post:
+      consumes:
+      - application/json
+      description: 检查指定角色是否具有对指定菜单的特定权限
+      parameters:
+      - description: 角色ID
+        in: path
+        name: roleID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/HasMenuPermissionRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/HasMenuPermissionResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 检查角色是否具有指定菜单权限
+      tags:
+      - 菜单权限管理
+  /api/v1/permission/roles/{roleID}/menu-permissions:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定角色的所有菜单权限配置列表
+      parameters:
+      - description: 角色ID
+        in: path
+        name: roleID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/GetRoleMenuPermissionsResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取角色的菜单权限列表
+      tags:
+      - 菜单权限管理
+  /api/v1/permission/roles/{roleID}/menu-tree:
+    get:
+      consumes:
+      - application/json
+      description: 根据角色的权限配置，返回该角色可访问的菜单树结构
+      parameters:
+      - description: 角色ID
+        in: path
+        name: roleID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/GetRoleMenuTreeResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取角色的菜单树
+      tags:
+      - 菜单权限管理
+  /api/v1/permission/roles/{roleID}/menus:
+    post:
+      consumes:
+      - application/json
+      description: 为指定角色配置菜单权限，会清除角色的旧菜单映射，然后添加新的映射
+      parameters:
+      - description: 角色ID
+        in: path
+        name: roleID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ConfigureRoleMenusRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/ConfigureRoleMenusResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 配置角色的菜单权限
+      tags:
+      - 菜单权限管理
+  /api/v1/permission/roles/{roleID}/users:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定角色下所有用户的ID列表（不分页）
+      parameters:
+      - description: 角色ID
+        in: path
+        name: roleID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/GetUsersByRoleResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 角色未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 根据角色ID获取所有用户
+      tags:
+      - 权限管理
+  /api/v1/permission/roles/{roleID}/users/batch-bind:
+    post:
+      consumes:
+      - application/json
+      description: 批量为角色绑定用户，覆盖旧的绑定关系
+      parameters:
+      - description: 角色ID
+        in: path
+        name: roleID
+        required: true
+        type: string
+      - description: 请求体
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/BatchBindUsersToRoleRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/BatchBindUsersToRoleResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 角色未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 批量绑定用户到角色
+      tags:
+      - 权限管理
+  /api/v1/permission/user-roles:
+    get:
+      consumes:
+      - application/json
+      description: 分页列出用户的角色分配记录
+      parameters:
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量
+        in: query
+        name: limit
+        type: integer
+      - description: 搜索关键词
+        in: query
+        name: search
+        type: string
+      - description: 字段级过滤
+        in: query
+        name: filter
+        type: string
+      - description: 排序规则
+        in: query
+        name: sort
+        type: string
+      - description: 指定返回字段
+        in: query
+        name: fields
+        type: string
+      - default: false
+        description: 是否返回总数
+        in: query
+        name: include_total
+        type: boolean
+      - description: 用户ID
+        in: query
+        name: user_id
+        type: string
+      - description: 角色ID
+        in: query
+        name: role_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/UserRoleListResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 列出用户的角色分配记录
+      tags:
+      - 权限管理
+  /api/v1/permission/users/{userID}/menu-tree:
+    get:
+      consumes:
+      - application/json
+      description: 根据用户的最新角色绑定，返回该用户可访问的菜单树结构
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/GetUserMenuTreeResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户的菜单树
+      tags:
+      - 菜单权限管理
+  /api/v1/permission/users/{userID}/roles/latest:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户最后一次角色分配
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/AssignRoleToUserResponseDTO'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "404":
+          description: 分配未找到
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/OperationStatusResponseDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户最后一次角色分配
+      tags:
+      - 权限管理
+swagger: "2.0"
