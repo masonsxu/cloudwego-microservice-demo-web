@@ -29,7 +29,18 @@ export default {
     no: 'No',
     total: 'Total {count} items',
     page: 'Page {page}',
-    perPage: '{limit} items per page'
+    perPage: '{limit} items per page',
+    all: 'All',
+    select: 'Select',
+    saving: 'Saving...',
+    deleting: 'Deleting...',
+    showing: 'Showing',
+    entries: 'entries',
+    previous: 'Previous',
+    next: 'Next',
+    close: 'Close',
+    upload: 'Upload',
+    uploading: 'Uploading...'
   },
   auth: {
     loginTitle: 'Welcome to Login',
@@ -48,7 +59,9 @@ export default {
     newPassword: 'New Password',
     confirmPassword: 'Confirm Password',
     passwordChanged: 'Password changed successfully',
-    passwordChangeFailed: 'Failed to change password'
+    passwordChangeFailed: 'Failed to change password',
+    passwordMinLength: 'Password must be at least 6 characters',
+    passwordMismatch: 'Passwords do not match'
   },
   menu: {
     dashboard: 'Dashboard',
@@ -80,7 +93,11 @@ export default {
     editOrganization: 'Edit Organization',
     deleteOrganization: 'Delete Organization',
     uploadLogo: 'Upload Logo',
-    deleteLogo: 'Delete Logo'
+    deleteLogo: 'Delete Logo',
+    confirmDelete: 'Confirm Delete',
+    deleteWarning: 'Are you sure you want to delete the following organization',
+    deleteReason: 'Delete Reason',
+    provinceCityPlaceholder: 'Comma separated, e.g., Beijing,Chaoyang'
   },
   department: {
     name: 'Department Name',
@@ -90,7 +107,11 @@ export default {
     memberCount: 'Member Count',
     createDepartment: 'Create Department',
     editDepartment: 'Edit Department',
-    deleteDepartment: 'Delete Department'
+    deleteDepartment: 'Delete Department',
+    confirmDelete: 'Confirm Delete',
+    deleteWarning: 'Are you sure you want to delete the following department',
+    deleteReason: 'Delete Reason',
+    selectOrganization: 'Please select an organization first'
   },
   user: {
     username: 'Username',
@@ -113,7 +134,23 @@ export default {
     changeStatus: 'Change Status',
     unlockUser: 'Unlock User',
     resetPassword: 'Reset Password',
-    forceChangePassword: 'Force Change Password'
+    forceChangePassword: 'Force Change Password',
+    searchPlaceholder: 'Search by username, name, email, phone',
+    statusActive: 'Active',
+    statusInactive: 'Inactive',
+    addUser: 'Add User',
+    confirmDelete: 'Confirm Delete',
+    deleteWarning: 'Are you sure you want to delete the following user',
+    deleteReason: 'Delete Reason',
+    disable: 'Disable',
+    enable: 'Enable',
+    disableReason: 'User disabled',
+    enableReason: 'User enabled',
+    gender: 'Gender',
+    genderMale: 'Male',
+    genderFemale: 'Female',
+    professionalTitle: 'Professional Title',
+    licenseNumber: 'License Number'
   },
   role: {
     name: 'Role Name',
@@ -126,7 +163,11 @@ export default {
     editRole: 'Edit Role',
     deleteRole: 'Delete Role',
     assignUsers: 'Assign Users',
-    configurePermissions: 'Configure Permissions'
+    configurePermissions: 'Configure Permissions',
+    confirmDelete: 'Confirm Delete',
+    deleteWarning: 'Are you sure you want to delete the following role',
+    deleteReason: 'Delete Reason',
+    cannotDeleteSystemRole: 'Cannot delete system role'
   },
   menuConfig: {
     name: 'Menu Name',
@@ -141,7 +182,10 @@ export default {
     full: 'Full Control',
     none: 'None',
     uploadConfig: 'Upload Config',
-    configureMenus: 'Configure Menus'
+    configureMenus: 'Configure Menus',
+    selectFile: 'Select File',
+    fileFormatHint: 'Supports JSON and YAML formats',
+    uploadFailed: 'Upload failed'
   },
   theme: {
     light: 'Light Theme',
@@ -152,5 +196,8 @@ export default {
     zhCN: '简体中文',
     enUS: 'English',
     switchLanguage: 'Switch Language'
+  },
+  profile: {
+    updateSuccess: 'Profile updated successfully'
   }
 }

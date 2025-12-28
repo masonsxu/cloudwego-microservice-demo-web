@@ -29,7 +29,18 @@ export default {
     no: '否',
     total: '共 {count} 条',
     page: '第 {page} 页',
-    perPage: '每页 {limit} 条'
+    perPage: '每页 {limit} 条',
+    all: '全部',
+    select: '请选择',
+    saving: '保存中...',
+    deleting: '删除中...',
+    showing: '显示',
+    entries: '条记录',
+    previous: '上一页',
+    next: '下一页',
+    close: '关闭',
+    upload: '上传',
+    uploading: '上传中...'
   },
   auth: {
     loginTitle: '欢迎登录',
@@ -48,7 +59,9 @@ export default {
     newPassword: '新密码',
     confirmPassword: '确认密码',
     passwordChanged: '密码修改成功',
-    passwordChangeFailed: '密码修改失败'
+    passwordChangeFailed: '密码修改失败',
+    passwordMinLength: '密码至少6位',
+    passwordMismatch: '两次输入的密码不一致'
   },
   menu: {
     dashboard: '仪表盘',
@@ -80,7 +93,11 @@ export default {
     editOrganization: '编辑组织',
     deleteOrganization: '删除组织',
     uploadLogo: '上传Logo',
-    deleteLogo: '删除Logo'
+    deleteLogo: '删除Logo',
+    confirmDelete: '确认删除',
+    deleteWarning: '确定要删除以下组织吗',
+    deleteReason: '删除原因',
+    provinceCityPlaceholder: '用逗号分隔，例如：北京,朝阳区'
   },
   department: {
     name: '部门名称',
@@ -90,7 +107,11 @@ export default {
     memberCount: '成员数量',
     createDepartment: '创建部门',
     editDepartment: '编辑部门',
-    deleteDepartment: '删除部门'
+    deleteDepartment: '删除部门',
+    confirmDelete: '确认删除',
+    deleteWarning: '确定要删除以下部门吗',
+    deleteReason: '删除原因',
+    selectOrganization: '请先选择组织'
   },
   user: {
     username: '用户名',
@@ -113,7 +134,23 @@ export default {
     changeStatus: '变更状态',
     unlockUser: '解锁用户',
     resetPassword: '重置密码',
-    forceChangePassword: '强制修改密码'
+    forceChangePassword: '强制修改密码',
+    searchPlaceholder: '搜索用户名、姓名、邮箱、手机号',
+    statusActive: '正常',
+    statusInactive: '禁用',
+    addUser: '添加用户',
+    confirmDelete: '确认删除',
+    deleteWarning: '确定要删除以下用户吗',
+    deleteReason: '删除原因',
+    disable: '禁用',
+    enable: '启用',
+    disableReason: '用户被禁用',
+    enableReason: '用户已启用',
+    gender: '性别',
+    genderMale: '男',
+    genderFemale: '女',
+    professionalTitle: '职称',
+    licenseNumber: '执业证号'
   },
   role: {
     name: '角色名称',
@@ -126,7 +163,11 @@ export default {
     editRole: '编辑角色',
     deleteRole: '删除角色',
     assignUsers: '分配用户',
-    configurePermissions: '配置权限'
+    configurePermissions: '配置权限',
+    confirmDelete: '确认删除',
+    deleteWarning: '确定要删除以下角色吗',
+    deleteReason: '删除原因',
+    cannotDeleteSystemRole: '无法删除系统角色'
   },
   menuConfig: {
     name: '菜单名称',
@@ -141,7 +182,10 @@ export default {
     full: '完全控制',
     none: '无权限',
     uploadConfig: '上传配置',
-    configureMenus: '配置菜单'
+    configureMenus: '配置菜单',
+    selectFile: '选择文件',
+    fileFormatHint: '支持JSON和YAML格式',
+    uploadFailed: '上传失败'
   },
   theme: {
     light: '亮色主题',
@@ -152,5 +196,8 @@ export default {
     zhCN: '简体中文',
     enUS: 'English',
     switchLanguage: '切换语言'
+  },
+  profile: {
+    updateSuccess: '个人信息更新成功'
   }
 }
