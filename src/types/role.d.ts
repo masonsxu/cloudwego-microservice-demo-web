@@ -50,6 +50,14 @@ export interface BatchBindUsersRequest {
 
 export interface ListRolesResponse extends BaseResponse {
   roles: RoleDefinition[]
+  page?: {
+    page: number
+    limit: number
+    total: number
+    total_pages: number
+    has_next: boolean
+    has_prev: boolean
+  }
 }
 
 export interface GetRoleResponse extends BaseResponse {

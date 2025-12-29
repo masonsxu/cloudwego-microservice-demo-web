@@ -40,7 +40,9 @@ export default {
     next: '下一页',
     close: '关闭',
     upload: '上传',
-    uploading: '上传中...'
+    uploading: '上传中...',
+    saveFailed: '保存失败',
+    deleteFailed: '删除失败'
   },
   auth: {
     loginTitle: '欢迎登录',
@@ -135,6 +137,7 @@ export default {
     unlockUser: '解锁用户',
     resetPassword: '重置密码',
     forceChangePassword: '强制修改密码',
+    search: '搜索',
     searchPlaceholder: '搜索用户名、姓名、邮箱、手机号',
     statusActive: '正常',
     statusInactive: '禁用',
@@ -150,7 +153,8 @@ export default {
     genderMale: '男',
     genderFemale: '女',
     professionalTitle: '职称',
-    licenseNumber: '执业证号'
+    licenseNumber: '执业证号',
+    password: '密码'
   },
   role: {
     name: '角色名称',

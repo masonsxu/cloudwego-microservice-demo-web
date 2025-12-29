@@ -40,7 +40,9 @@ export default {
     next: 'Next',
     close: 'Close',
     upload: 'Upload',
-    uploading: 'Uploading...'
+    uploading: 'Uploading...',
+    saveFailed: 'Save failed',
+    deleteFailed: 'Delete failed'
   },
   auth: {
     loginTitle: 'Welcome to Login',
@@ -135,6 +137,7 @@ export default {
     unlockUser: 'Unlock User',
     resetPassword: 'Reset Password',
     forceChangePassword: 'Force Change Password',
+    search: 'Search',
     searchPlaceholder: 'Search by username, name, email, phone',
     statusActive: 'Active',
     statusInactive: 'Inactive',
@@ -150,7 +153,8 @@ export default {
     genderMale: 'Male',
     genderFemale: 'Female',
     professionalTitle: 'Professional Title',
-    licenseNumber: 'License Number'
+    licenseNumber: 'License Number',
+    password: 'Password'
   },
   role: {
     name: 'Role Name',

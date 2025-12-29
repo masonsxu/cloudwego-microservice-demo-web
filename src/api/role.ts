@@ -6,6 +6,7 @@ import type {
   BatchBindUsersRequest,
   RoleDefinition,
   ListRolesResponse,
+  GetRoleResponse,
   GetUsersByRoleResponse,
   ListUserRolesResponse,
   AssignRoleToUserResponse
@@ -27,13 +28,13 @@ export const listRolesApi = (params: {
   request.get<ListRolesResponse>('/v1/permission/roles', { params })
 
 export const createRoleApi = (data: CreateRoleRequest) =>
-  request.post<RoleDefinition>('/v1/permission/roles', data)
+  request.post<GetRoleResponse>('/v1/permission/roles', data)
 
 export const getRoleApi = (roleId: string) =>
-  request.get<RoleDefinition>(`/v1/permission/roles/${roleId}`)
+  request.get<GetRoleResponse>(`/v1/permission/roles/${roleId}`)
 
 export const updateRoleApi = (roleDefinitionId: string, data: UpdateRoleRequest) =>
-  request.put<RoleDefinition>(`/v1/permission/roles/${roleDefinitionId}`, data)
+  request.put<GetRoleResponse>(`/v1/permission/roles/${roleDefinitionId}`, data)
 
 export const deleteRoleApi = (roleId: string, data: DeleteRoleRequest) =>
   request.delete(`/v1/permission/roles/${roleId}`, { data })

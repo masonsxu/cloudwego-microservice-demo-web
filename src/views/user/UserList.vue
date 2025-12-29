@@ -369,20 +369,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import {
-  listUsersApi,
-  createUserApi,
-  updateUserApi,
-  deleteUserApi,
-  changeUserStatusApi
-} from '@/api/user'
 import { listOrganizationsApi } from '@/api/organization'
 import { listRolesApi } from '@/api/role'
-import type { UserProfile, CreateUserRequest, UpdateUserRequest } from '@/types/user'
+import {
+  changeUserStatusApi,
+  createUserApi,
+  deleteUserApi,
+  listUsersApi,
+  updateUserApi
+} from '@/api/user'
 import type { Organization } from '@/types/organization'
 import type { RoleDefinition } from '@/types/role'
+import type { CreateUserRequest, UpdateUserRequest, UserProfile } from '@/types/user'
+import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
@@ -403,6 +403,7 @@ const submitting = ref(false)
 const deleting = ref(false)
 const userToDelete = ref<UserProfile | null>(null)
 const deleteReason = ref('')
+const currentUserId = ref<string | null>(null)
 
 const formData = ref<CreateUserRequest | UpdateUserRequest>({
   username: '',
@@ -431,10 +432,16 @@ const loadUsers = async () => {
     if (organizationFilter.value) {
       params.organization_id = organizationFilter.value
     }
-    const res = await listUsersApi(params)
-    users.value = res.users
-  } catch (error) {
+
+    const response = await listUsersApi(params)
+    if (response && response.users) {
+      users.value = response.users
+    } else {
+      throw new Error('API返回的users数据为空')
+    }
+  } catch (error: any) {
     console.error('Failed to load users:', error)
+    alert(error.message || '加载用户失败')
   } finally {
     loading.value = false
   }
@@ -442,19 +449,29 @@ const loadUsers = async () => {
 
 const loadOrganizations = async () => {
   try {
-    const res = await listOrganizationsApi({ fetch_all: true })
-    organizations.value = res.organizations
-  } catch (error) {
+    const response = await listOrganizationsApi({ fetch_all: true })
+    if (response && response.organizations) {
+      organizations.value = response.organizations
+    } else {
+      throw new Error('API返回的organizations数据为空')
+    }
+  } catch (error: any) {
     console.error('Failed to load organizations:', error)
+    alert(error.message || '加载组织失败')
   }
 }
 
 const loadRoles = async () => {
   try {
-    const res = await listRolesApi({ fetch_all: true })
-    roles.value = res.roles
-  } catch (error) {
+    const response = await listRolesApi({ fetch_all: true })
+    if (response && response.roles) {
+      roles.value = response.roles
+    } else {
+      throw new Error('API返回的roles数据为空')
+    }
+  } catch (error: any) {
     console.error('Failed to load roles:', error)
+    alert(error.message || '加载角色失败')
   }
 }
 
@@ -465,6 +482,7 @@ const getOrganizationName = (orgId: string) => {
 
 const openCreateModal = () => {
   isEditMode.value = false
+  currentUserId.value = null
   formData.value = {
     username: '',
     password: '',
@@ -480,6 +498,7 @@ const openCreateModal = () => {
 
 const openEditModal = (user: UserProfile) => {
   isEditMode.value = true
+  currentUserId.value = user.id
   formData.value = {
     real_name: user.real_name,
     email: user.email,
@@ -492,23 +511,54 @@ const openEditModal = (user: UserProfile) => {
 
 const closeModal = () => {
   showModal.value = false
+  currentUserId.value = null
 }
 
 const handleSubmit = async () => {
+  // 验证表单数据
+  if (!isEditMode.value) {
+    if (!formData.value.username || !formData.value.username.trim()) {
+      alert(t('user.username') + '不能为空')
+      return
+    }
+    if (!formData.value.password || !formData.value.password.trim()) {
+      alert(t('user.password') + '不能为空')
+      return
+    }
+  }
+  if (!formData.value.real_name || !formData.value.real_name.trim()) {
+    alert(t('user.realName') + '不能为空')
+    return
+  }
+  if (!formData.value.email || !formData.value.email.trim()) {
+    alert(t('user.email') + '不能为空')
+    return
+  }
+  if (!formData.value.phone || !formData.value.phone.trim()) {
+    alert(t('user.phone') + '不能为空')
+    return
+  }
+  if (!formData.value.organization_id) {
+    alert(t('user.organization') + '不能为空')
+    return
+  }
+  if (!formData.value.role_ids || formData.value.role_ids.length === 0) {
+    alert(t('user.roles') + '不能为空')
+    return
+  }
+
   submitting.value = true
   try {
-    if (isEditMode.value) {
-      const user = users.value.find(u => u.username === formData.value.username)
-      if (user) {
-        await updateUserApi(user.id, formData.value as UpdateUserRequest)
-      }
+    if (isEditMode.value && currentUserId.value) {
+      await updateUserApi(currentUserId.value, formData.value as UpdateUserRequest)
     } else {
       await createUserApi(formData.value as CreateUserRequest)
     }
     closeModal()
     loadUsers()
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to save user:', error)
+    alert(error.message || '保存用户失败')
   } finally {
     submitting.value = false
   }
@@ -533,8 +583,9 @@ const handleDelete = async () => {
     await deleteUserApi(userToDelete.value.id, { reason: deleteReason.value })
     closeDeleteModal()
     loadUsers()
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to delete user:', error)
+    alert(error.message || '删除用户失败')
   } finally {
     deleting.value = false
   }
@@ -548,8 +599,9 @@ const toggleUserStatus = async (user: UserProfile) => {
       reason: newStatus === 0 ? t('user.disableReason') : t('user.enableReason')
     })
     loadUsers()
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to change user status:', error)
+    alert(error.message || '变更用户状态失败')
   }
 }
 

@@ -6,7 +6,8 @@ import type {
   UploadLogoRequest,
   BindLogoRequest,
   Organization,
-  ListOrganizationsResponse
+  ListOrganizationsResponse,
+  GetOrganizationResponse
 } from '@/types/organization'
 
 export const listOrganizationsApi = (params: {
@@ -18,17 +19,18 @@ export const listOrganizationsApi = (params: {
   fields?: string
   include_total?: boolean
   parent_id?: string
+  fetch_all?: boolean
 }) =>
   request.get<ListOrganizationsResponse>('/v1/identity/organizations', { params })
 
 export const createOrganizationApi = (data: CreateOrganizationRequest) =>
-  request.post<Organization>('/v1/identity/organizations', data)
+  request.post<GetOrganizationResponse>('/v1/identity/organizations', data)
 
 export const getOrganizationApi = (organizationId: string) =>
-  request.get<Organization>(`/v1/identity/organizations/${organizationId}`)
+  request.get<GetOrganizationResponse>(`/v1/identity/organizations/${organizationId}`)
 
 export const updateOrganizationApi = (organizationId: string, data: UpdateOrganizationRequest) =>
-  request.put<Organization>(`/v1/identity/organizations/${organizationId}`, data)
+  request.put<GetOrganizationResponse>(`/v1/identity/organizations/${organizationId}`, data)
 
 export const deleteOrganizationApi = (organizationId: string, data: DeleteOrganizationRequest) =>
   request.delete(`/v1/identity/organizations/${organizationId}`, { data })
@@ -43,4 +45,4 @@ export const deleteLogoApi = (logoId: string) =>
   request.delete(`/v1/identity/organization-logos/${logoId}`)
 
 export const bindLogoApi = (organizationId: string, data: BindLogoRequest) =>
-  request.put<Organization>(`/v1/identity/organizations/${organizationId}/logo`, data)
+  request.put<GetOrganizationResponse>(`/v1/identity/organizations/${organizationId}/logo`, data)

@@ -81,7 +81,7 @@
                 {{ org.accreditation_status }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                {{ org.province_city.join(', ') }}
+                {{ Array.isArray(org.province_city) ? org.province_city.join(', ') : '-' }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                 {{ org.member_count }}
@@ -250,7 +250,8 @@ import {
   listOrganizationsApi,
   createOrganizationApi,
   updateOrganizationApi,
-  deleteOrganizationApi
+  deleteOrganizationApi,
+  deleteLogoApi
 } from '@/api/organization'
 import type { Organization, CreateOrganizationRequest, UpdateOrganizationRequest } from '@/types/organization'
 
@@ -284,10 +285,15 @@ const provinceCityInput = computed({
 const loadOrganizations = async () => {
   loading.value = true
   try {
-    const res = await listOrganizationsApi({ fetch_all: true })
-    organizations.value = res.organizations
-  } catch (error) {
+    const response = await listOrganizationsApi({ fetch_all: true })
+    if (response && response.organizations) {
+      organizations.value = response.organizations
+    } else {
+      throw new Error('API返回的organizations数据为空')
+    }
+  } catch (error: any) {
     console.error('Failed to load organizations:', error)
+    alert(error.message || '加载组织失败')
   } finally {
     loading.value = false
   }
@@ -312,7 +318,7 @@ const openEditModal = (org: Organization) => {
     name: org.name,
     facility_type: org.facility_type,
     accreditation_status: org.accreditation_status,
-    province_city: [...org.province_city]
+    province_city: Array.isArray(org.province_city) ? [...org.province_city] : []
   }
   showModal.value = true
 }
@@ -323,6 +329,24 @@ const closeModal = () => {
 }
 
 const handleSubmit = async () => {
+  // 验证表单数据
+  if (!formData.value.name || !formData.value.name.trim()) {
+    alert(t('organization.name') + '不能为空')
+    return
+  }
+  if (!formData.value.facility_type || !formData.value.facility_type.trim()) {
+    alert(t('organization.facilityType') + '不能为空')
+    return
+  }
+  if (!formData.value.accreditation_status || !formData.value.accreditation_status.trim()) {
+    alert(t('organization.accreditationStatus') + '不能为空')
+    return
+  }
+  if (!formData.value.province_city || formData.value.province_city.length === 0) {
+    alert(t('organization.provinceCity') + '不能为空')
+    return
+  }
+
   submitting.value = true
   try {
     if (isEditMode.value && currentOrganization.value) {
@@ -332,8 +356,9 @@ const handleSubmit = async () => {
     }
     closeModal()
     loadOrganizations()
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to save organization:', error)
+    alert(error.message || t('common.saveFailed'))
   } finally {
     submitting.value = false
   }
@@ -358,8 +383,9 @@ const handleDelete = async () => {
     await deleteOrganizationApi(orgToDelete.value.id, { reason: deleteReason.value })
     closeDeleteModal()
     loadOrganizations()
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to delete organization:', error)
+    alert(error.message || t('common.deleteFailed'))
   } finally {
     deleting.value = false
   }
@@ -368,12 +394,12 @@ const handleDelete = async () => {
 const deleteLogo = async () => {
   if (!currentOrganization.value?.logo_id) return
   try {
-    const { deleteLogoApi } = await import('@/api/organization')
     await deleteLogoApi(currentOrganization.value.logo_id)
     currentOrganization.value.logo = undefined
     currentOrganization.value.logo_id = undefined
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to delete logo:', error)
+    alert(error.message || t('common.deleteFailed'))
   }
 }
 

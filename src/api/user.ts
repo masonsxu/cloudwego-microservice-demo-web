@@ -1,23 +1,24 @@
-import request from './request'
 import type {
-  CreateUserRequest,
-  UpdateUserRequest,
-  UpdateMeRequest,
-  DeleteUserRequest,
   ChangeUserStatusRequest,
-  UnlockUserRequest,
-  UserProfile,
+  CreateUserRequest,
+  DeleteUserRequest,
+  GetUserMembershipsResponse,
+  GetUserPrimaryMembershipResponse,
+  GetUserResponse,
   ListUsersResponse,
   SearchUsersResponse,
-  GetUserMembershipsResponse,
-  GetUserPrimaryMembershipResponse
+  UnlockUserRequest,
+  UpdateMeRequest,
+  UpdateUserRequest,
+  UserProfile
 } from '@/types/user'
+import request from './request'
 
 export const getCurrentUserApi = () =>
-  request.get<UserProfile>('/v1/identity/users/me')
+  request.get<GetUserResponse>('/v1/identity/users/me')
 
 export const updateCurrentUserApi = (data: UpdateMeRequest) =>
-  request.put<UserProfile>('/v1/identity/users/me', data)
+  request.put<GetUserResponse>('/v1/identity/users/me', data)
 
 export const listUsersApi = (params: {
   page?: number
@@ -46,13 +47,13 @@ export const searchUsersApi = (params: {
   request.get<SearchUsersResponse>('/v1/identity/users/search', { params })
 
 export const createUserApi = (data: CreateUserRequest) =>
-  request.post<UserProfile>('/v1/identity/users', data)
+  request.post<GetUserResponse>('/v1/identity/users', data)
 
 export const getUserApi = (userId: string) =>
-  request.get<UserProfile>(`/v1/identity/users/${userId}`)
+  request.get<GetUserResponse>(`/v1/identity/users/${userId}`)
 
 export const updateUserApi = (userId: string, data: UpdateUserRequest) =>
-  request.put<UserProfile>(`/v1/identity/users/${userId}`, data)
+  request.put<GetUserResponse>(`/v1/identity/users/${userId}`, data)
 
 export const deleteUserApi = (userId: string, data: DeleteUserRequest) =>
   request.delete(`/v1/identity/users/${userId}`, { data })
