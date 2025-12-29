@@ -46,11 +46,10 @@ export const useMenuStore = defineStore('menu', {
               meta: {
                 title: menu.name,
                 icon: menu.icon
-              }
-            }
-
-            if (menu.children && menu.children.length > 0) {
-              route.children = this.convertMenuToRoutes(menu.children)
+              },
+              children: menu.children && menu.children.length > 0
+                ? this.convertMenuToRoutes(menu.children)
+                : undefined
             }
 
             routes.push(route)

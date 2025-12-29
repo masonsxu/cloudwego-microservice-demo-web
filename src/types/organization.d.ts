@@ -35,6 +35,13 @@ export interface DeleteOrganizationRequest {
   reason?: string
 }
 
+export interface ListOrganizationsRequest {
+  page?: number
+  limit?: number
+  fetch_all?: boolean
+  parent_id?: string
+}
+
 export interface OrganizationLogo {
   id: string
   file_name: string

@@ -88,6 +88,12 @@
                     {{ t('role.configurePermissions') }}
                   </button>
                   <button
+                    @click="openMenuConfigModal(role)"
+                    class="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300"
+                  >
+                    {{ t('role.configureMenus') }}
+                  </button>
+                  <button
                     @click="openDeleteModal(role)"
                     :disabled="role.is_system_role"
                     class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -242,6 +248,14 @@
         </div>
       </div>
     </div>
+
+    <!-- 菜单权限配置弹窗 -->
+    <RoleMenuConfigModal
+      v-if="showMenuConfigModal"
+      :role="menuConfigRole"
+      @close="closeMenuConfigModal"
+      @saved="onMenuConfigSaved"
+    />
   </div>
 </template>
 
@@ -256,6 +270,7 @@ import {
   getRoleApi
 } from '@/api/role'
 import type { RoleDefinition, CreateRoleRequest, UpdateRoleRequest } from '@/types/role'
+import RoleMenuConfigModal from '@/components/modal/RoleMenuConfigModal.vue'
 
 const { t } = useI18n()
 
@@ -270,6 +285,10 @@ const deleting = ref(false)
 const roleToDelete = ref<RoleDefinition | null>(null)
 const deleteReason = ref('')
 const currentRole = ref<RoleDefinition | null>(null)
+
+// 菜单配置相关
+const showMenuConfigModal = ref(false)
+const menuConfigRole = ref<RoleDefinition | null>(null)
 
 const formData = ref<CreateRoleRequest | UpdateRoleRequest>({
   name: '',
@@ -377,6 +396,22 @@ const handleDelete = async () => {
   } finally {
     deleting.value = false
   }
+}
+
+// 菜单权限配置方法
+const openMenuConfigModal = (role: RoleDefinition) => {
+  menuConfigRole.value = role
+  showMenuConfigModal.value = true
+}
+
+const closeMenuConfigModal = () => {
+  showMenuConfigModal.value = false
+  menuConfigRole.value = null
+}
+
+const onMenuConfigSaved = () => {
+  closeMenuConfigModal()
+  loadRoles()
 }
 
 onMounted(() => {

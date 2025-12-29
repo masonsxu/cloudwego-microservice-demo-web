@@ -4,8 +4,13 @@ import type {
   UpdateDepartmentRequest,
   DeleteDepartmentRequest,
   Department,
-  GetDepartmentResponse
+  GetDepartmentResponse,
+  ListDepartmentsRequest,
+  ListDepartmentsResponse
 } from '@/types/department'
+
+export const listDepartmentsApi = (params: ListDepartmentsRequest) =>
+  request.get<ListDepartmentsResponse>('/v1/identity/departments', { params })
 
 export const createDepartmentApi = (data: CreateDepartmentRequest) =>
   request.post<Department>('/v1/identity/departments', data)

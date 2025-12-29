@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { listOrganizationsApi, createOrganizationApi, updateOrganizationApi, deleteOrganizationApi } from '@/api/organization'
-import type { Organization } from '@/types'
+import type { Organization, CreateOrganizationRequest, UpdateOrganizationRequest, DeleteOrganizationRequest, ListOrganizationsRequest } from '@/types'
 
 interface OrganizationState {
   organizations: Organization[]
@@ -16,7 +16,7 @@ export const useOrganizationStore = defineStore('organization', {
   }),
 
   actions: {
-    async fetchOrganizations(params?: any) {
+    async fetchOrganizations(params?: ListOrganizationsRequest) {
       this.loading = true
       try {
         const res = await listOrganizationsApi(params || {})
@@ -30,12 +30,12 @@ export const useOrganizationStore = defineStore('organization', {
       }
     },
 
-    async createOrganization(data: any) {
+    async createOrganization(data: CreateOrganizationRequest) {
       this.loading = true
       try {
         const res = await createOrganizationApi(data)
-        this.organizations.push(res)
-        return res
+        this.organizations.push(res.organization)
+        return res.organization
       } catch (error) {
         console.error('Failed to create organization:', error)
         throw error
@@ -44,15 +44,15 @@ export const useOrganizationStore = defineStore('organization', {
       }
     },
 
-    async updateOrganization(organizationId: string, data: any) {
+    async updateOrganization(organizationId: string, data: UpdateOrganizationRequest) {
       this.loading = true
       try {
         const res = await updateOrganizationApi(organizationId, data)
         const index = this.organizations.findIndex(org => org.id === organizationId)
         if (index !== -1) {
-          this.organizations[index] = res
+          this.organizations[index] = res.organization
         }
-        return res
+        return res.organization
       } catch (error) {
         console.error('Failed to update organization:', error)
         throw error
@@ -61,7 +61,7 @@ export const useOrganizationStore = defineStore('organization', {
       }
     },
 
-    async deleteOrganization(organizationId: string, data?: any) {
+    async deleteOrganization(organizationId: string, data?: DeleteOrganizationRequest) {
       this.loading = true
       try {
         await deleteOrganizationApi(organizationId, data || {})

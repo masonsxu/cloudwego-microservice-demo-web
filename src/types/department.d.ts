@@ -28,6 +28,12 @@ export interface DeleteDepartmentRequest {
   reason?: string
 }
 
+export interface ListDepartmentsRequest {
+  page?: number
+  limit?: number
+  organization_id?: string
+}
+
 export interface GetDepartmentResponse extends BaseResponse {
   department: Department
 }

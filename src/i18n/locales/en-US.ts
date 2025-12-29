@@ -168,6 +168,8 @@ export default {
     deleteRole: 'Delete Role',
     assignUsers: 'Assign Users',
     configurePermissions: 'Configure Permissions',
+    configureMenus: 'Configure Menus',
+    configureMenuPermissions: 'Configure Menu Permissions',
     confirmDelete: 'Confirm Delete',
     deleteWarning: 'Are you sure you want to delete the following role',
     deleteReason: 'Delete Reason',
@@ -203,5 +205,19 @@ export default {
   },
   profile: {
     updateSuccess: 'Profile updated successfully'
+  },
+  dashboard: {
+    totalUsers: 'Total Users',
+    totalOrganizations: 'Total Organizations',
+    totalRoles: 'Total Roles',
+    totalDepartments: 'Total Departments',
+    welcome: 'Welcome',
+    welcomeMessage: 'This is the CloudWeGo Microservice Management Platform. You can manage users, organizations, roles, and permissions here.',
+    manageUsers: 'Manage Users',
+    manageUsersDesc: 'View and manage all users in the system',
+    manageOrganizations: 'Manage Organizations',
+    manageOrganizationsDesc: 'View and manage organization structure',
+    manageRoles: 'Manage Roles',
+    manageRolesDesc: 'Configure roles and permission settings'
   }
 }

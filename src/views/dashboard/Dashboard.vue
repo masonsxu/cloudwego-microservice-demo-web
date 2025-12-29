@@ -5,6 +5,7 @@
     </h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- 用户统计 -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div class="flex items-center">
           <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
@@ -13,12 +14,16 @@
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-sm text-gray-600 dark:text-gray-400">总用户数</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">1,234</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">{{ t('dashboard.totalUsers') }}</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">
+              <span v-if="loading.users" class="animate-pulse">--</span>
+              <span v-else>{{ stats.userCount }}</span>
+            </p>
           </div>
         </div>
       </div>
 
+      <!-- 组织统计 -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div class="flex items-center">
           <div class="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
@@ -27,12 +32,16 @@
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-sm text-gray-600 dark:text-gray-400">组织数量</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">56</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">{{ t('dashboard.totalOrganizations') }}</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">
+              <span v-if="loading.organizations" class="animate-pulse">--</span>
+              <span v-else>{{ stats.organizationCount }}</span>
+            </p>
           </div>
         </div>
       </div>
 
+      <!-- 角色统计 -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div class="flex items-center">
           <div class="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
@@ -41,12 +50,16 @@
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-sm text-gray-600 dark:text-gray-400">角色数量</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">12</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">{{ t('dashboard.totalRoles') }}</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">
+              <span v-if="loading.roles" class="animate-pulse">--</span>
+              <span v-else>{{ stats.roleCount }}</span>
+            </p>
           </div>
         </div>
       </div>
 
+      <!-- 部门统计 -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div class="flex items-center">
           <div class="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
@@ -55,24 +68,140 @@
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-sm text-gray-600 dark:text-gray-400">部门数量</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">89</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">{{ t('dashboard.totalDepartments') }}</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">
+              <span v-if="loading.departments" class="animate-pulse">--</span>
+              <span v-else>{{ stats.departmentCount }}</span>
+            </p>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- 欢迎卡片 -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">欢迎回来</h2>
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        {{ t('dashboard.welcome') }}, {{ authStore.realName }}!
+      </h2>
       <p class="text-gray-600 dark:text-gray-400">
-        欢迎使用 Cloudwego 微服务管理平台。这是一个基于 Vue 3 + TypeScript + Vite 构建的现代化管理后台系统。
+        {{ t('dashboard.welcomeMessage') }}
       </p>
+    </div>
+
+    <!-- 快捷操作 -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <router-link
+        to="/user/list"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+      >
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          {{ t('dashboard.manageUsers') }}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {{ t('dashboard.manageUsersDesc') }}
+        </p>
+      </router-link>
+
+      <router-link
+        to="/organization/list"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+      >
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          {{ t('dashboard.manageOrganizations') }}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {{ t('dashboard.manageOrganizationsDesc') }}
+        </p>
+      </router-link>
+
+      <router-link
+        to="/role/list"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+      >
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          {{ t('dashboard.manageRoles') }}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {{ t('dashboard.manageRolesDesc') }}
+        </p>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/stores/auth'
+import { listUsersApi } from '@/api/user'
+import { listOrganizationsApi } from '@/api/organization'
+import { listRolesApi } from '@/api/role'
+import { listDepartmentsApi } from '@/api/department'
 
 const { t } = useI18n()
+const authStore = useAuthStore()
+
+const stats = reactive({
+  userCount: 0,
+  organizationCount: 0,
+  roleCount: 0,
+  departmentCount: 0
+})
+
+const loading = reactive({
+  users: true,
+  organizations: true,
+  roles: true,
+  departments: true
+})
+
+const fetchStats = async () => {
+  // 并行获取所有统计数据
+  const [usersRes, orgsRes, rolesRes, deptsRes] = await Promise.allSettled([
+    listUsersApi({ page: 1, limit: 1, include_total: true }),
+    listOrganizationsApi({ page: 1, limit: 1 }),
+    listRolesApi({ page: 1, limit: 1 }),
+    listDepartmentsApi({ page: 1, limit: 1 })
+  ])
+
+  // 处理用户统计
+  if (usersRes.status === 'fulfilled' && usersRes.value?.page) {
+    stats.userCount = usersRes.value.page.total || 0
+  }
+  loading.users = false
+
+  // 处理组织统计
+  if (orgsRes.status === 'fulfilled') {
+    if (orgsRes.value?.page) {
+      stats.organizationCount = orgsRes.value.page.total || 0
+    } else if (orgsRes.value?.organizations) {
+      stats.organizationCount = orgsRes.value.organizations.length
+    }
+  }
+  loading.organizations = false
+
+  // 处理角色统计
+  if (rolesRes.status === 'fulfilled') {
+    if (rolesRes.value?.page) {
+      stats.roleCount = rolesRes.value.page.total || 0
+    } else if (rolesRes.value?.roles) {
+      stats.roleCount = rolesRes.value.roles.length
+    }
+  }
+  loading.roles = false
+
+  // 处理部门统计
+  if (deptsRes.status === 'fulfilled') {
+    if (deptsRes.value?.page) {
+      stats.departmentCount = deptsRes.value.page.total || 0
+    } else if (deptsRes.value?.departments) {
+      stats.departmentCount = deptsRes.value.departments.length
+    }
+  }
+  loading.departments = false
+}
+
+onMounted(() => {
+  fetchStats()
+})
 </script>

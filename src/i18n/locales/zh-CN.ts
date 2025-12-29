@@ -168,6 +168,8 @@ export default {
     deleteRole: '删除角色',
     assignUsers: '分配用户',
     configurePermissions: '配置权限',
+    configureMenus: '配置菜单',
+    configureMenuPermissions: '配置菜单权限',
     confirmDelete: '确认删除',
     deleteWarning: '确定要删除以下角色吗',
     deleteReason: '删除原因',
@@ -203,5 +205,19 @@ export default {
   },
   profile: {
     updateSuccess: '个人信息更新成功'
+  },
+  dashboard: {
+    totalUsers: '用户总数',
+    totalOrganizations: '组织总数',
+    totalRoles: '角色总数',
+    totalDepartments: '部门总数',
+    welcome: '欢迎',
+    welcomeMessage: '这是 CloudWeGo 微服务管理平台。您可以在这里管理用户、组织、角色和权限。',
+    manageUsers: '用户管理',
+    manageUsersDesc: '查看和管理系统中的所有用户',
+    manageOrganizations: '组织管理',
+    manageOrganizationsDesc: '查看和管理组织架构',
+    manageRoles: '角色管理',
+    manageRolesDesc: '配置角色和权限设置'
   }
 }

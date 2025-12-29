@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getCurrentUserApi, updateCurrentUserApi } from '@/api/user'
-import type { UserProfile } from '@/types'
+import type { UserProfile, UpdateMeRequest } from '@/types'
 
 interface UserState {
   currentUser: UserProfile | null
@@ -18,8 +18,8 @@ export const useUserStore = defineStore('user', {
       this.loading = true
       try {
         const res = await getCurrentUserApi()
-        this.currentUser = res
-        return res
+        this.currentUser = res.user
+        return res.user
       } catch (error) {
         console.error('Failed to fetch current user:', error)
         throw error
@@ -28,12 +28,12 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async updateCurrentUser(data: any) {
+    async updateCurrentUser(data: UpdateMeRequest) {
       this.loading = true
       try {
         const res = await updateCurrentUserApi(data)
-        this.currentUser = res
-        return res
+        this.currentUser = res.user
+        return res.user
       } catch (error) {
         console.error('Failed to update current user:', error)
         throw error

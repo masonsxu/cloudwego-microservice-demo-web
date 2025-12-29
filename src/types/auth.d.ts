@@ -1,4 +1,6 @@
 import type { BaseResponse, TokenInfo } from './api'
+import type { UserProfile, UserMembership } from './user'
+import type { MenuNode } from './menu'
 
 export interface LoginRequest {
   username: string
@@ -40,8 +42,3 @@ export interface ForceChangePasswordRequest {
 export interface LogoutRequest {
   refresh_token?: string
 }
-
-// Import other types that are referenced
-import type { UserProfile } from './user'
-import type { UserMembership } from './user'
-import type { MenuNode } from './menu'
