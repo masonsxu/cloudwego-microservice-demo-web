@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia'
 import { loginApi, logoutApi, refreshTokenApi } from '@/api/auth'
-import type { UserProfile, UserMembership, MenuNode } from '@/types'
+import type { MenuNode, UserMembership, UserProfile } from '@/types'
+import { defineStore } from 'pinia'
 
 interface AuthState {
   token: string
@@ -12,14 +12,61 @@ interface AuthState {
 }
 
 export const useAuthStore = defineStore('auth', {
-  state: (): AuthState => ({
-    token: '',
-    refreshToken: '',
-    user: null,
-    memberships: [],
-    menuTree: [],
-    roleIds: []
-  }),
+  state: (): AuthState => {
+    // 从 localStorage 恢复状态，避免页面刷新时丢失认证信息
+    const token = localStorage.getItem('access_token') || ''
+    const refreshToken = localStorage.getItem('refresh_token') || ''
+
+    let user: UserProfile | null = null
+    let memberships: UserMembership[] = []
+    let menuTree: MenuNode[] = []
+    let roleIds: string[] = []
+
+    try {
+      const userStr = localStorage.getItem('user')
+      if (userStr) {
+        user = JSON.parse(userStr)
+      }
+    } catch (e) {
+      console.error('Failed to parse user from localStorage:', e)
+    }
+
+    try {
+      const membershipsStr = localStorage.getItem('memberships')
+      if (membershipsStr) {
+        memberships = JSON.parse(membershipsStr)
+      }
+    } catch (e) {
+      console.error('Failed to parse memberships from localStorage:', e)
+    }
+
+    try {
+      const menuTreeStr = localStorage.getItem('menu_tree')
+      if (menuTreeStr) {
+        menuTree = JSON.parse(menuTreeStr)
+      }
+    } catch (e) {
+      console.error('Failed to parse menu_tree from localStorage:', e)
+    }
+
+    try {
+      const roleIdsStr = localStorage.getItem('role_ids')
+      if (roleIdsStr) {
+        roleIds = JSON.parse(roleIdsStr)
+      }
+    } catch (e) {
+      console.error('Failed to parse role_ids from localStorage:', e)
+    }
+
+    return {
+      token,
+      refreshToken,
+      user,
+      memberships,
+      menuTree,
+      roleIds
+    }
+  },
   getters: {
     isAuthenticated: (state) => !!state.token,
     username: (state) => state.user?.username || '',
@@ -48,12 +95,13 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async refreshAccessToken() {
-      if (!this.refreshToken) {
-        throw new Error('No refresh token available')
-      }
-      const res = await refreshTokenApi({ refresh_token: this.refreshToken })
+      // 根据 API 文档，刷新 token 通过 Cookie 传递，请求体可以为空
+      // 如果后端需要 refresh_token，则传递；否则传递空对象
+      const res = await refreshTokenApi(this.refreshToken ? { refresh_token: this.refreshToken } : undefined)
       this.token = res.token_info.access_token
-      localStorage.setItem('access_token', this.token)
+      // 更新 refreshToken（如果后端返回了新的 refresh_token，使用新的；否则保持原值）
+      // 注意：根据当前实现，后端可能不返回 refresh_token，所以保持原值
+      this.saveToStorage()
     },
 
     saveToStorage() {

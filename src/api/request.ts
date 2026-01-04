@@ -7,8 +7,29 @@ const instance: AxiosInstance = axios.create({
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true // 允许发送 Cookie
 })
+
+// 用于标记是否正在刷新 token
+let isRefreshing = false
+// 用于存储等待刷新完成的请求
+let failedQueue: Array<{
+  resolve: (value?: any) => void
+  reject: (reason?: any) => void
+}> = []
+
+// 处理等待队列中的请求
+const processQueue = (error: any) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error)
+    } else {
+      prom.resolve()
+    }
+  })
+  failedQueue = []
+}
 
 // 创建自定义的 API 客户端，返回数据而不是 AxiosResponse
 const apiClient = {
@@ -33,6 +54,10 @@ const apiClient = {
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const authStore = useAuthStore()
+    // 如果是刷新 token 的请求，跳过添加 Authorization header，使用 Cookie
+    if (config.url?.includes('/v1/identity/auth/refresh')) {
+      return config
+    }
     if (authStore.token) {
       config.headers.Authorization = `Bearer ${authStore.token}`
     }
@@ -72,19 +97,58 @@ instance.interceptors.response.use(
     return Promise.reject(error)
   },
   async (error) => {
+    const originalRequest = error.config
+
     // 处理401未授权错误
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // 如果是刷新 token 的请求返回 401，直接跳转登录
+      if (originalRequest.url?.includes('/v1/identity/auth/refresh')) {
+        const authStore = useAuthStore()
+        authStore.clearAuth()
+        window.location.href = '/login'
+        return Promise.reject(error)
+      }
+
+      // 如果正在刷新 token，将请求加入队列
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject })
+        })
+          .then(() => {
+            // 从 authStore 获取最新的 token
+            const authStore = useAuthStore()
+            originalRequest.headers.Authorization = `Bearer ${authStore.token}`
+            return instance.request(originalRequest)
+          })
+          .catch((err) => {
+            return Promise.reject(err)
+          })
+      }
+
+      // 标记正在刷新 token
+      originalRequest._retry = true
+      isRefreshing = true
+
       const authStore = useAuthStore()
       try {
         // 尝试刷新token
         await authStore.refreshAccessToken()
+        const newToken = authStore.token
+        // 处理等待队列
+        processQueue(null)
+        // 更新原始请求的 header
+        originalRequest.headers.Authorization = `Bearer ${newToken}`
         // 重新发送原始请求
-        return instance.request(error.config)
+        return instance.request(originalRequest)
       } catch (refreshError) {
-        // 刷新失败，清除认证信息并跳转到登录页
+        // 刷新失败，处理等待队列
+        processQueue(refreshError)
+        // 清除认证信息并跳转到登录页
         authStore.clearAuth()
         window.location.href = '/login'
         return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
       }
     }
     // 其他错误

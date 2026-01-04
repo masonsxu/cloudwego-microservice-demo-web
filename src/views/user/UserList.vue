@@ -126,7 +126,7 @@
                 {{ user.phone }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                {{ getOrganizationName(user.organization_id) }}
+                {{ getOrganizationName(user.primary_organization_id || user.organization_id) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm">
                 <span
@@ -271,7 +271,6 @@
               <select
                 v-model="formData.organization_id"
                 required
-                :disabled="isEditMode"
                 class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
               >
                 <option value="">{{ t('common.select') }}</option>
@@ -372,11 +371,11 @@
 import { listOrganizationsApi } from '@/api/organization'
 import { listRolesApi } from '@/api/role'
 import {
-  changeUserStatusApi,
-  createUserApi,
-  deleteUserApi,
-  listUsersApi,
-  updateUserApi
+    changeUserStatusApi,
+    createUserApi,
+    deleteUserApi,
+    listUsersApi,
+    updateUserApi
 } from '@/api/user'
 import type { Organization } from '@/types/organization'
 import type { RoleDefinition } from '@/types/role'
@@ -500,11 +499,12 @@ const openEditModal = (user: UserProfile) => {
   isEditMode.value = true
   currentUserId.value = user.id
   formData.value = {
+    username: user.username,
     real_name: user.real_name,
     email: user.email,
     phone: user.phone,
-    organization_id: user.organization_id,
-    role_ids: user.role_ids
+    organization_id: user.primary_organization_id || user.organization_id || '',
+    role_ids: Array.isArray(user.role_ids) ? [...user.role_ids] : []
   }
   showModal.value = true
 }

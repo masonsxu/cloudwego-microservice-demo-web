@@ -78,17 +78,25 @@ const loadMenuTree = async () => {
 
   loading.value = true
   try {
-    // 获取完整菜单树
-    const fullTreeRes = await getMenuTreeApi()
-    menuTree.value = fullTreeRes.menu_tree || []
-
-    // 获取角色的菜单权限
+    // 先获取角色的菜单权限（实时配置，来自 /menu-tree 接口）
     const roleTreeRes = await getRoleMenuTreeApi(props.role.id)
     const roleMenuTree = roleTreeRes.menu_tree || []
 
-    // 构建权限映射
+    // 构建权限映射（使用角色菜单树的实时配置）
     menuConfigs.value = new Map()
     buildMenuConfigsFromTree(roleMenuTree)
+
+    // 获取完整菜单树（用于确保显示所有菜单项，包括权限为 none 的）
+    const fullTreeRes = await getMenuTreeApi()
+    const fullMenuTree = fullTreeRes.menu_tree || []
+
+    // 对于完整菜单树中但角色菜单树中没有的菜单项，设置为 none
+    const roleMenuIds = new Set<string>()
+    collectMenuIds(roleMenuTree, roleMenuIds)
+    setMissingMenusToNone(fullMenuTree, roleMenuIds)
+
+    // 使用完整菜单树作为显示结构，但权限配置来自角色菜单树（实时配置）
+    menuTree.value = fullMenuTree
   } catch (error) {
     console.error('Failed to load menu tree:', error)
   } finally {
@@ -101,6 +109,26 @@ const buildMenuConfigsFromTree = (menus: MenuNode[]) => {
     menuConfigs.value.set(menu.id, menu.permission_level)
     if (menu.children && menu.children.length > 0) {
       buildMenuConfigsFromTree(menu.children)
+    }
+  })
+}
+
+const collectMenuIds = (menus: MenuNode[], ids: Set<string>) => {
+  menus.forEach(menu => {
+    ids.add(menu.id)
+    if (menu.children && menu.children.length > 0) {
+      collectMenuIds(menu.children, ids)
+    }
+  })
+}
+
+const setMissingMenusToNone = (menus: MenuNode[], roleMenuIds: Set<string>) => {
+  menus.forEach(menu => {
+    if (!roleMenuIds.has(menu.id) && !menuConfigs.value.has(menu.id)) {
+      menuConfigs.value.set(menu.id, 'none')
+    }
+    if (menu.children && menu.children.length > 0) {
+      setMissingMenusToNone(menu.children, roleMenuIds)
     }
   })
 }

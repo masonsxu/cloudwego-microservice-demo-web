@@ -25,5 +25,5 @@ export const forceChangePasswordApi = (data: ForceChangePasswordRequest) =>
 export const resetPasswordApi = (userId: string, data: ResetPasswordRequest) =>
   request.post(`/v1/identity/auth/password/reset/${userId}`, data)
 
-export const refreshTokenApi = (data: RefreshTokenRequest) =>
-  request.post<RefreshTokenResponse>('/v1/identity/auth/refresh', data)
+export const refreshTokenApi = (data?: RefreshTokenRequest) =>
+  request.post<RefreshTokenResponse>('/v1/identity/auth/refresh', data || {})
