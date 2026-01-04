@@ -24,38 +24,42 @@ export const useAuthStore = defineStore('auth', {
 
     try {
       const userStr = localStorage.getItem('user')
-      if (userStr) {
+      if (userStr && userStr !== 'undefined' && userStr !== 'null') {
         user = JSON.parse(userStr)
       }
     } catch (e) {
       console.error('Failed to parse user from localStorage:', e)
+      localStorage.removeItem('user')
     }
 
     try {
       const membershipsStr = localStorage.getItem('memberships')
-      if (membershipsStr) {
+      if (membershipsStr && membershipsStr !== 'undefined' && membershipsStr !== 'null') {
         memberships = JSON.parse(membershipsStr)
       }
     } catch (e) {
       console.error('Failed to parse memberships from localStorage:', e)
+      localStorage.removeItem('memberships')
     }
 
     try {
       const menuTreeStr = localStorage.getItem('menu_tree')
-      if (menuTreeStr) {
+      if (menuTreeStr && menuTreeStr !== 'undefined' && menuTreeStr !== 'null') {
         menuTree = JSON.parse(menuTreeStr)
       }
     } catch (e) {
       console.error('Failed to parse menu_tree from localStorage:', e)
+      localStorage.removeItem('menu_tree')
     }
 
     try {
       const roleIdsStr = localStorage.getItem('role_ids')
-      if (roleIdsStr) {
+      if (roleIdsStr && roleIdsStr !== 'undefined' && roleIdsStr !== 'null') {
         roleIds = JSON.parse(roleIdsStr)
       }
     } catch (e) {
       console.error('Failed to parse role_ids from localStorage:', e)
+      localStorage.removeItem('role_ids')
     }
 
     return {

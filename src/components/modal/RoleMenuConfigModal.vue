@@ -80,14 +80,18 @@ const loadMenuTree = async () => {
   try {
     // 先获取角色的菜单权限（实时配置，来自 /menu-tree 接口）
     const roleTreeRes = await getRoleMenuTreeApi(props.role.id)
+    console.log('角色菜单树响应:', roleTreeRes)
     const roleMenuTree = roleTreeRes.menu_tree || []
+    console.log('角色菜单树:', roleMenuTree)
 
     // 构建权限映射（使用角色菜单树的实时配置）
     menuConfigs.value = new Map()
     buildMenuConfigsFromTree(roleMenuTree)
+    console.log('权限配置 Map:', Object.fromEntries(menuConfigs.value))
 
     // 获取完整菜单树（用于确保显示所有菜单项，包括权限为 none 的）
     const fullTreeRes = await getMenuTreeApi()
+    console.log('完整菜单树响应:', fullTreeRes)
     const fullMenuTree = fullTreeRes.menu_tree || []
 
     // 对于完整菜单树中但角色菜单树中没有的菜单项，设置为 none
