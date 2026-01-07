@@ -120,11 +120,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/stores/auth'
 import { getCurrentUserApi, updateCurrentUserApi } from '@/api/user'
+import { useAuthStore } from '@/stores/auth'
 import type { UpdateMeRequest } from '@/types/user'
+import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -148,16 +148,16 @@ const loadProfile = async () => {
   loading.value = true
   try {
     const res = await getCurrentUserApi()
-    userProfile.value = res
+    userProfile.value = res.user
     formData.value = {
-      real_name: res.real_name,
-      email: res.email,
-      phone: res.phone,
-      gender: res.gender,
-      employee_id: res.employee_id,
-      professional_title: res.professional_title,
-      license_number: res.license_number,
-      specialties: res.specialties || []
+      real_name: res.user.real_name,
+      email: res.user.email,
+      phone: res.user.phone,
+      gender: res.user.gender,
+      employee_id: res.user.employee_id,
+      professional_title: res.user.professional_title,
+      license_number: res.user.license_number,
+      specialties: res.user.specialties || []
     }
   } catch (error) {
     console.error('Failed to load profile:', error)
@@ -185,8 +185,8 @@ const handleSubmit = async () => {
   submitting.value = true
   try {
     const res = await updateCurrentUserApi(formData.value)
-    userProfile.value = res
-    authStore.user = res
+    userProfile.value = res.user
+    authStore.user = res.user
     alert(t('profile.updateSuccess'))
   } catch (error) {
     console.error('Failed to update profile:', error)

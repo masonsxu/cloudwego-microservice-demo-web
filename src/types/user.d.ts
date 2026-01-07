@@ -78,6 +78,7 @@ export interface UpdateMeRequest {
   email?: string
   phone?: string
   gender?: number
+  employee_id?: string
   license_number?: string
   professional_title?: string
   specialties?: string[]
