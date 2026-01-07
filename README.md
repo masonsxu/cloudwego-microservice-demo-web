@@ -10,7 +10,7 @@
 - **状态管理**: Pinia 2.1.0
 - **路由**: Vue Router 4.2.0
 - **国际化**: vue-i18n 9.8.0
-- **HTTP客户端**: Axios 1.6.0
+- **HTTP客户端**: ofetch 1.5.1 (基于原生 fetch，更轻量、更现代)
 - **样式**: Tailwind CSS 3.4.0
 - **UI组件**: Headless UI 1.7.0 + Heroicons 2.1.0
 
