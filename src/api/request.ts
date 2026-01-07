@@ -19,6 +19,11 @@ let failedQueue: Array<{
   reject: (reason?: any) => void
 }> = []
 
+// 用于存储每个 URL 的 Etag 值
+const etagCache = new Map<string, string>()
+// 用于存储每个 URL 的缓存响应数据（用于 304 响应）
+const responseCache = new Map<string, any>()
+
 // 处理等待队列中的请求
 const processQueue = (error: any) => {
   failedQueue.forEach((prom) => {
@@ -50,6 +55,26 @@ const apiClient = {
   }
 }
 
+// 获取请求的唯一标识（URL，axios 会自动处理查询参数）
+const getRequestKey = (config: InternalAxiosRequestConfig): string => {
+  // axios 会在发送请求前将 params 序列化到 URL 中
+  // 但在请求拦截器中，URL 可能还没有包含查询参数
+  // 所以我们需要手动构建完整的 URL
+  if (!config.url) return ''
+
+  let url = config.url
+  const params = config.params
+
+  // 如果 URL 中已经有查询参数，或者 params 为空，直接返回 URL
+  if (url.includes('?') || !params || Object.keys(params).length === 0) {
+    return url
+  }
+
+  // 构建查询字符串
+  const queryString = new URLSearchParams(params).toString()
+  return `${url}?${queryString}`
+}
+
 // 请求拦截器
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -61,6 +86,18 @@ instance.interceptors.request.use(
     if (authStore.token) {
       config.headers.Authorization = `Bearer ${authStore.token}`
     }
+
+    // 为 GET 请求添加 If-None-Match 请求头（支持 Etag 缓存）
+    if (config.method?.toLowerCase() === 'get') {
+      const requestKey = getRequestKey(config)
+      if (requestKey) {
+        const etag = etagCache.get(requestKey)
+        if (etag) {
+          config.headers['If-None-Match'] = etag
+        }
+      }
+    }
+
     return config
   },
   (error) => {
@@ -71,6 +108,26 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   (response) => {
+    const requestKey = getRequestKey(response.config)
+    const method = response.config.method?.toLowerCase() || ''
+
+    // 处理 304 Not Modified 响应
+    if (response.status === 304) {
+      // 从缓存中返回之前的数据
+      const cachedData = responseCache.get(requestKey)
+      if (cachedData) {
+        return cachedData
+      }
+      // 如果没有缓存数据，返回空响应（这种情况不应该发生）
+      return response.data
+    }
+
+    // 保存 Etag（仅对 GET 请求）
+    // 注意：ETag 值必须保留双引号，这是 HTTP 规范要求的
+    if (method === 'get' && response.headers.etag && requestKey) {
+      etagCache.set(requestKey, response.headers.etag)
+    }
+
     const { data } = response
     // 检查基础响应状态
     if (!data.base_resp) {
@@ -86,6 +143,12 @@ instance.interceptors.response.use(
         error.name = 'APIError'
         return Promise.reject(error)
       }
+
+      // 缓存响应数据（仅对 GET 请求）
+      if (method === 'get' && requestKey) {
+        responseCache.set(requestKey, response.data)
+      }
+
       // 返回 response.data 以保持类型安全
       return response.data
     }
