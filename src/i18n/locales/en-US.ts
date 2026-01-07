@@ -159,6 +159,10 @@ export default {
   role: {
     name: 'Role Name',
     description: 'Role Description',
+    status: 'Status',
+    statusActive: 'Active',
+    statusInactive: 'Inactive',
+    statusDeprecated: 'Deprecated',
     isSystemRole: 'System Role',
     permissions: 'Permissions',
     resource: 'Resource',
@@ -166,6 +170,8 @@ export default {
     createRole: 'Create Role',
     editRole: 'Edit Role',
     deleteRole: 'Delete Role',
+    enableRole: 'Enable Role',
+    disableRole: 'Disable Role',
     assignUsers: 'Assign Users',
     configurePermissions: 'Configure Permissions',
     configureMenus: 'Configure Menus',
@@ -173,7 +179,8 @@ export default {
     confirmDelete: 'Confirm Delete',
     deleteWarning: 'Are you sure you want to delete the following role',
     deleteReason: 'Delete Reason',
-    cannotDeleteSystemRole: 'Cannot delete system role'
+    cannotDeleteSystemRole: 'Cannot delete system role',
+    cannotDisableSystemRole: 'Cannot disable system role'
   },
   menuConfig: {
     name: 'Menu Name',

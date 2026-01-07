@@ -284,16 +284,38 @@
                 {{ t('user.roles') }} *
               </label>
               <div class="grid grid-cols-2 gap-2">
-                <label v-for="role in roles" :key="role.id" class="flex items-center gap-2">
+                <label
+                  v-for="role in roles"
+                  :key="role.id"
+                  :class="[
+                    'flex items-center gap-2 p-2 rounded',
+                    role.status !== 1 ? 'opacity-60 bg-gray-100 dark:bg-gray-700' : ''
+                  ]"
+                >
                   <input
                     v-model="formData.role_ids"
                     type="checkbox"
                     :value="role.id"
-                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    :disabled="role.status !== 1"
+                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
                   />
                   <span class="text-sm text-gray-700 dark:text-gray-300">{{ role.name }}</span>
+                  <span
+                    v-if="role.status !== 1"
+                    :class="[
+                      'px-1.5 py-0.5 text-xs font-medium rounded',
+                      role.status === 2
+                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                        : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                    ]"
+                  >
+                    {{ role.status === 2 ? t('role.statusInactive') : t('role.statusDeprecated') }}
+                  </span>
                 </label>
               </div>
+              <p v-if="hasInactiveRoles" class="mt-2 text-xs text-yellow-600 dark:text-yellow-400">
+                * 未激活或已弃用的角色无法被选择
+              </p>
             </div>
             <div v-if="!isEditMode">
               <label class="flex items-center gap-2">
@@ -380,7 +402,7 @@ import {
 import type { Organization } from '@/types/organization'
 import type { RoleDefinition } from '@/types/role'
 import type { CreateUserRequest, UpdateUserRequest, UserProfile } from '@/types/user'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -413,6 +435,11 @@ const formData = ref<CreateUserRequest | UpdateUserRequest>({
   organization_id: '',
   role_ids: [],
   must_change_password: false
+})
+
+// 计算属性：检查是否有未激活的角色
+const hasInactiveRoles = computed(() => {
+  return roles.value.some(role => role.status !== 1)
 })
 
 const loadUsers = async () => {

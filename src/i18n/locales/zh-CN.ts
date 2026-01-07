@@ -159,6 +159,10 @@ export default {
   role: {
     name: '角色名称',
     description: '角色描述',
+    status: '状态',
+    statusActive: '活跃',
+    statusInactive: '未激活',
+    statusDeprecated: '已弃用',
     isSystemRole: '系统角色',
     permissions: '权限',
     resource: '资源',
@@ -166,6 +170,8 @@ export default {
     createRole: '创建角色',
     editRole: '编辑角色',
     deleteRole: '删除角色',
+    enableRole: '启用角色',
+    disableRole: '禁用角色',
     assignUsers: '分配用户',
     configurePermissions: '配置权限',
     configureMenus: '配置菜单',
@@ -173,7 +179,8 @@ export default {
     confirmDelete: '确认删除',
     deleteWarning: '确定要删除以下角色吗',
     deleteReason: '删除原因',
-    cannotDeleteSystemRole: '无法删除系统角色'
+    cannotDeleteSystemRole: '无法删除系统角色',
+    cannotDisableSystemRole: '无法禁用系统角色'
   },
   menuConfig: {
     name: '菜单名称',

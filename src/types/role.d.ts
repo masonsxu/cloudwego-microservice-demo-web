@@ -1,4 +1,5 @@
 import type { BaseResponse } from './api'
+import type { RoleStatus } from './role'
 
 export interface Permission {
   resource: string
@@ -6,13 +7,18 @@ export interface Permission {
   description?: string
 }
 
+export { RoleStatus }
+
 export interface RoleDefinition {
   id: string
   name: string
   description?: string
+  status: RoleStatus
   is_system_role: boolean
   permissions: Permission[]
   user_count?: number
+  created_by?: string
+  updated_by?: string
   created_at: number
   updated_at: number
 }
@@ -27,6 +33,7 @@ export interface CreateRoleRequest {
 export interface UpdateRoleRequest {
   name?: string
   description?: string
+  status?: RoleStatus
   permissions?: Permission[]
 }
 

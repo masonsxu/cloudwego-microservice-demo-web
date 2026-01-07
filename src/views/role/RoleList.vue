@@ -30,6 +30,9 @@
                 {{ t('role.description') }}
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                {{ t('role.status') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 {{ t('role.isSystemRole') }}
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -42,12 +45,12 @@
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
             <tr v-if="loading">
-              <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+              <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                 {{ t('common.loading') }}...
               </td>
             </tr>
             <tr v-else-if="roles.length === 0">
-              <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+              <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                 {{ t('common.noData') }}
               </td>
             </tr>
@@ -57,6 +60,16 @@
               </td>
               <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
                 {{ role.description || '-' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <span
+                  :class="[
+                    'px-2 py-1 text-xs font-medium rounded-full',
+                    getRoleStatusClass(role.status)
+                  ]"
+                >
+                  {{ getRoleStatusText(role.status) }}
+                </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm">
                 <span
@@ -80,6 +93,16 @@
                     class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                   >
                     {{ t('common.edit') }}
+                  </button>
+                  <button
+                    @click="toggleRoleStatus(role)"
+                    :disabled="role.is_system_role"
+                    :class="[
+                      role.status === 1 ? 'text-orange-600 hover:text-orange-900' : 'text-green-600 hover:text-green-900',
+                      'disabled:opacity-50 disabled:cursor-not-allowed'
+                    ]"
+                  >
+                    {{ role.status === 1 ? t('role.disableRole') : t('role.enableRole') }}
                   </button>
                   <button
                     @click="openPermissionsModal(role)"
@@ -270,6 +293,7 @@ import {
   getRoleApi
 } from '@/api/role'
 import type { RoleDefinition, CreateRoleRequest, UpdateRoleRequest } from '@/types/role'
+import { RoleStatus } from '@/types/role'
 import RoleMenuConfigModal from '@/components/modal/RoleMenuConfigModal.vue'
 
 const { t } = useI18n()
@@ -412,6 +436,48 @@ const closeMenuConfigModal = () => {
 const onMenuConfigSaved = () => {
   closeMenuConfigModal()
   loadRoles()
+}
+
+// 角色状态辅助函数
+const getRoleStatusClass = (status: RoleStatus) => {
+  switch (status) {
+    case RoleStatus.Active:
+      return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+    case RoleStatus.Inactive:
+      return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+    case RoleStatus.Deprecated:
+      return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+    default:
+      return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+  }
+}
+
+const getRoleStatusText = (status: RoleStatus) => {
+  switch (status) {
+    case RoleStatus.Active:
+      return t('role.statusActive')
+    case RoleStatus.Inactive:
+      return t('role.statusInactive')
+    case RoleStatus.Deprecated:
+      return t('role.statusDeprecated')
+    default:
+      return '-'
+  }
+}
+
+const toggleRoleStatus = async (role: RoleDefinition) => {
+  if (role.is_system_role) {
+    alert(t('role.cannotDisableSystemRole'))
+    return
+  }
+
+  const newStatus = role.status === RoleStatus.Active ? RoleStatus.Inactive : RoleStatus.Active
+  try {
+    await updateRoleApi(role.id, { status: newStatus })
+    loadRoles()
+  } catch (error) {
+    console.error('Failed to update role status:', error)
+  }
 }
 
 onMounted(() => {
