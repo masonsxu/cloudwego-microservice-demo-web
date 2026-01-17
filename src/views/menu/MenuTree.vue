@@ -303,11 +303,16 @@ const loadMenuTree = async () => {
     // 获取用户菜单树（后端返回的用户可访问的菜单树和权限信息）
     const userTreeRes = await getUserMenuTreeApi(authStore.user.id)
     const userMenuTree = userTreeRes.menu_tree || []
-    const permissions = userTreeRes.permissions || []
+    // 优先使用 API 返回的权限数据，如果为空则使用 authStore 中存储的权限数据
+    const permissions = userTreeRes.permissions && userTreeRes.permissions.length > 0
+      ? userTreeRes.permissions
+      : (authStore.permissions || [])
 
     console.log('用户菜单树（后端返回）:', userTreeRes)
     console.log('用户菜单树数据:', userMenuTree)
-    console.log('权限数据:', permissions)
+    console.log('API 返回的权限数据:', userTreeRes.permissions)
+    console.log('AuthStore 中的权限数据:', authStore.permissions)
+    console.log('最终使用的权限数据:', permissions)
 
     // 获取完整菜单树（所有菜单项）
     const fullTreeRes = await getMenuTreeApi()
@@ -316,6 +321,23 @@ const loadMenuTree = async () => {
 
     // 构建权限映射表
     const permissionMap = PermissionUtils.buildPermissionMap(permissions)
+    console.log('权限映射表内容:', Object.fromEntries(permissionMap))
+
+    // 打印菜单树中的所有 ID，用于调试
+    const collectMenuIds = (menus: MenuNode[], ids: string[] = []): string[] => {
+      menus.forEach(menu => {
+        ids.push(menu.id)
+        if (menu.children && menu.children.length > 0) {
+          collectMenuIds(menu.children, ids)
+        }
+      })
+      return ids
+    }
+    const userMenuIds = collectMenuIds(userMenuTree)
+    const fullMenuIds = collectMenuIds(fullMenuTree)
+    console.log('用户菜单树中的所有 ID:', userMenuIds)
+    console.log('完整菜单树中的所有 ID:', fullMenuIds)
+    console.log('权限数据中的所有 menu_id:', permissions.map(p => p.menu_id))
 
     // 如果用户菜单树已经包含了所有菜单，直接使用并合并权限
     const countMenus = (menus: MenuNode[]): number => {
@@ -335,15 +357,15 @@ const loadMenuTree = async () => {
     // 如果用户菜单树已经包含了所有菜单，直接使用并合并权限
     if (userMenuCount >= fullMenuCount && userMenuTree.length > 0) {
       console.log('使用后端返回的完整菜单树，合并权限信息')
+      // 始终使用权限映射表来合并权限，确保权限信息正确
       PermissionUtils.mergePermissionsToMenuTree(userMenuTree, permissionMap)
       menuTree.value = userMenuTree
-      return
+    } else {
+      // 如果用户菜单树不完整，使用完整菜单树并合并权限
+      console.log('用户菜单树不完整，使用完整菜单树并合并权限...')
+      PermissionUtils.mergePermissionsToMenuTree(fullMenuTree, permissionMap)
+      menuTree.value = fullMenuTree
     }
-
-    // 如果用户菜单树不完整，使用完整菜单树并合并权限
-    console.log('用户菜单树不完整，使用完整菜单树并合并权限...')
-    PermissionUtils.mergePermissionsToMenuTree(fullMenuTree, permissionMap)
-    menuTree.value = fullMenuTree
 
     // 打印权限信息用于调试
     if (fullMenuTree.length > 0) {

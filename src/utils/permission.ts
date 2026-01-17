@@ -16,6 +16,7 @@ export class PermissionUtils {
     permissions.forEach(perm => {
       map.set(perm.menu_id, perm.permission as PermissionLevel)
     })
+    console.log('构建权限映射表:', Object.fromEntries(map))
     return map
   }
 
@@ -32,9 +33,12 @@ export class PermissionUtils {
       // 从权限映射中获取权限级别
       if (permissionMap.has(menu.id)) {
         menu.permission_level = permissionMap.get(menu.id) as PermissionLevel
+        console.log(`菜单 ${menu.name} (${menu.id}) 权限匹配成功: ${menu.permission_level}`)
       } else {
         // 如果没有找到权限，默认为无权限
         menu.permission_level = PermissionLevel.NONE
+        console.warn(`菜单 ${menu.name} (${menu.id}) 在权限映射表中未找到，设置为无权限`)
+        console.log('权限映射表中的所有 key:', Array.from(permissionMap.keys()))
       }
 
       // 递归处理子菜单
