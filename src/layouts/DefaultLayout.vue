@@ -174,11 +174,13 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
+import { useMenuStore } from '@/stores/menu'
 
 const router = useRouter()
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const themeStore = useThemeStore()
+const menuStore = useMenuStore()
 
 const showUserMenu = ref(false)
 
@@ -201,6 +203,7 @@ const toggleUserMenu = () => {
 
 const handleLogout = async () => {
   await authStore.logout()
+  menuStore.reset() // 重置菜单 store
   router.push('/login')
 }
 </script>

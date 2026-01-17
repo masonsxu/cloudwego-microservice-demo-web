@@ -4,23 +4,17 @@ export interface UserProfile {
   id: string
   username: string
   real_name: string
-  first_name?: string
-  last_name?: string
   email: string
   phone: string
   employee_id?: string
-  organization_id: string
-  primary_organization_id?: string
   status: number
-  role_ids: string[]
   gender?: number
-  license_number?: string
   professional_title?: string
-  specialties?: string[]
   must_change_password?: boolean
-  account_expiry?: number
   created_at: number
   updated_at: number
+  last_login_time?: number
+  login_attempts?: number
 }
 
 export interface UserMembership {

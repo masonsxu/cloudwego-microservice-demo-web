@@ -64,6 +64,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { MenuNode, PermissionLevel } from '@/types/menu'
+import { PermissionLevel as PermissionLevelEnum, PERMISSION_LEVELS, PERMISSION_LABEL_KEYS } from '@/constants/permission'
 
 const props = defineProps<{
   menu: MenuNode
@@ -87,31 +88,23 @@ const children = computed(() => {
 })
 
 const currentPermission = computed(() => {
-  return props.menuConfigs.get(props.menu.id) || 'none'
+  return props.menuConfigs.get(props.menu.id) || PermissionLevelEnum.NONE
 })
 
-const permissionLevels = computed(() => [
-  {
-    value: 'none' as PermissionLevel,
-    label: t('menuConfig.none'),
-    activeClass: 'bg-gray-500 text-white'
-  },
-  {
-    value: 'read' as PermissionLevel,
-    label: t('menuConfig.read'),
-    activeClass: 'bg-yellow-500 text-white'
-  },
-  {
-    value: 'write' as PermissionLevel,
-    label: t('menuConfig.write'),
-    activeClass: 'bg-blue-500 text-white'
-  },
-  {
-    value: 'full' as PermissionLevel,
-    label: t('menuConfig.full'),
-    activeClass: 'bg-green-500 text-white'
+const permissionLevels = computed(() => {
+  const levelConfigs = {
+    [PermissionLevelEnum.NONE]: { activeClass: 'bg-gray-500 text-white' },
+    [PermissionLevelEnum.READ]: { activeClass: 'bg-yellow-500 text-white' },
+    [PermissionLevelEnum.WRITE]: { activeClass: 'bg-blue-500 text-white' },
+    [PermissionLevelEnum.FULL]: { activeClass: 'bg-green-500 text-white' }
   }
-])
+
+  return PERMISSION_LEVELS.map(level => ({
+    value: level,
+    label: t(PERMISSION_LABEL_KEYS[level]),
+    activeClass: levelConfigs[level].activeClass
+  }))
+})
 
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value

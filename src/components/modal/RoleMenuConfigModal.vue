@@ -55,6 +55,7 @@ import { useI18n } from 'vue-i18n'
 import { getRoleMenuTreeApi, configureRoleMenusApi, getMenuTreeApi } from '@/api/menu'
 import type { MenuNode, MenuConfig, PermissionLevel } from '@/types/menu'
 import type { RoleDefinition } from '@/types/role'
+import { PermissionLevel as PermissionLevelEnum } from '@/constants/permission'
 import MenuPermissionNode from './MenuPermissionNode.vue'
 
 const props = defineProps<{
@@ -129,7 +130,7 @@ const collectMenuIds = (menus: MenuNode[], ids: Set<string>) => {
 const setMissingMenusToNone = (menus: MenuNode[], roleMenuIds: Set<string>) => {
   menus.forEach(menu => {
     if (!roleMenuIds.has(menu.id) && !menuConfigs.value.has(menu.id)) {
-      menuConfigs.value.set(menu.id, 'none')
+      menuConfigs.value.set(menu.id, PermissionLevelEnum.NONE)
     }
     if (menu.children && menu.children.length > 0) {
       setMissingMenusToNone(menu.children, roleMenuIds)

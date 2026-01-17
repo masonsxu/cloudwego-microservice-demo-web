@@ -87,16 +87,6 @@
               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
             />
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ t('user.licenseNumber') }}
-            </label>
-            <input
-              v-model="formData.license_number"
-              type="text"
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            />
-          </div>
           <div class="flex justify-end gap-3 pt-4">
             <button
               type="button"
@@ -139,9 +129,7 @@ const formData = ref<UpdateMeRequest>({
   phone: '',
   gender: undefined,
   employee_id: '',
-  professional_title: '',
-  license_number: '',
-  specialties: []
+  professional_title: ''
 })
 
 const loadProfile = async () => {
@@ -155,9 +143,7 @@ const loadProfile = async () => {
       phone: res.user.phone,
       gender: res.user.gender,
       employee_id: res.user.employee_id,
-      professional_title: res.user.professional_title,
-      license_number: res.user.license_number,
-      specialties: res.user.specialties || []
+      professional_title: res.user.professional_title
     }
   } catch (error) {
     console.error('Failed to load profile:', error)
@@ -174,9 +160,7 @@ const resetForm = () => {
       phone: userProfile.value.phone,
       gender: userProfile.value.gender,
       employee_id: userProfile.value.employee_id,
-      professional_title: userProfile.value.professional_title,
-      license_number: userProfile.value.license_number,
-      specialties: userProfile.value.specialties || []
+      professional_title: userProfile.value.professional_title
     }
   }
 }

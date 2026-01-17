@@ -22,12 +22,15 @@ export function setupRouterGuards(router: Router) {
 
     // 检查是否已登录
     if (!authStore.isAuthenticated) {
+      // 如果未登录，重置菜单 store
+      menuStore.reset()
       next('/login')
       return
     }
 
     // 如果菜单路由未加载，则加载菜单
-    if (menuStore.routes.length === 0) {
+    // 检查 routesLoaded 标志和 loading 状态，避免重复加载和无限循环
+    if (!menuStore.routesLoaded && !menuStore.loading) {
       try {
         await menuStore.generateRoutes()
         // 动态添加路由
@@ -40,6 +43,10 @@ export function setupRouterGuards(router: Router) {
         console.error('Failed to load menu routes:', error)
         next('/login')
       }
+    } else if (menuStore.loading) {
+      // 如果正在加载中，等待加载完成
+      // 这里可以添加一个超时机制，但先简单处理：直接放行，让加载完成后的导航处理
+      next()
     } else {
       next()
     }

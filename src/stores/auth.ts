@@ -1,14 +1,15 @@
 import { loginApi, logoutApi, refreshTokenApi } from '@/api/auth'
-import type { MenuNode, UserMembership, UserProfile } from '@/types'
+import type { MenuNode, MenuPermission, UserProfile, LoginRole } from '@/types'
 import { defineStore } from 'pinia'
 
 interface AuthState {
   token: string
   refreshToken: string
   user: UserProfile | null
-  memberships: UserMembership[]
   menuTree: MenuNode[]
   roleIds: string[]
+  permissions: MenuPermission[]
+  roles: LoginRole[]
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -18,9 +19,10 @@ export const useAuthStore = defineStore('auth', {
     const refreshToken = localStorage.getItem('refresh_token') || ''
 
     let user: UserProfile | null = null
-    let memberships: UserMembership[] = []
     let menuTree: MenuNode[] = []
     let roleIds: string[] = []
+    let permissions: MenuPermission[] = []
+    let roles: LoginRole[] = []
 
     try {
       const userStr = localStorage.getItem('user')
@@ -30,16 +32,6 @@ export const useAuthStore = defineStore('auth', {
     } catch (e) {
       console.error('Failed to parse user from localStorage:', e)
       localStorage.removeItem('user')
-    }
-
-    try {
-      const membershipsStr = localStorage.getItem('memberships')
-      if (membershipsStr && membershipsStr !== 'undefined' && membershipsStr !== 'null') {
-        memberships = JSON.parse(membershipsStr)
-      }
-    } catch (e) {
-      console.error('Failed to parse memberships from localStorage:', e)
-      localStorage.removeItem('memberships')
     }
 
     try {
@@ -62,13 +54,34 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('role_ids')
     }
 
+    try {
+      const permissionsStr = localStorage.getItem('permissions')
+      if (permissionsStr && permissionsStr !== 'undefined' && permissionsStr !== 'null') {
+        permissions = JSON.parse(permissionsStr)
+      }
+    } catch (e) {
+      console.error('Failed to parse permissions from localStorage:', e)
+      localStorage.removeItem('permissions')
+    }
+
+    try {
+      const rolesStr = localStorage.getItem('roles')
+      if (rolesStr && rolesStr !== 'undefined' && rolesStr !== 'null') {
+        roles = JSON.parse(rolesStr)
+      }
+    } catch (e) {
+      console.error('Failed to parse roles from localStorage:', e)
+      localStorage.removeItem('roles')
+    }
+
     return {
       token,
       refreshToken,
       user,
-      memberships,
       menuTree,
-      roleIds
+      roleIds,
+      permissions,
+      roles
     }
   },
   getters: {
@@ -83,9 +96,10 @@ export const useAuthStore = defineStore('auth', {
       this.token = res.token_info.access_token
       this.refreshToken = res.token_info.access_token // 后端不返回refresh_token，暂时使用access_token
       this.user = res.user_profile
-      this.memberships = res.memberships
       this.menuTree = res.menu_tree || []
       this.roleIds = res.role_ids || []
+      this.permissions = res.permissions || []
+      this.roles = res.roles || []
       this.saveToStorage()
     },
 
@@ -112,18 +126,20 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('access_token', this.token)
       localStorage.setItem('refresh_token', this.refreshToken)
       localStorage.setItem('user', JSON.stringify(this.user))
-      localStorage.setItem('memberships', JSON.stringify(this.memberships))
       localStorage.setItem('menu_tree', JSON.stringify(this.menuTree))
       localStorage.setItem('role_ids', JSON.stringify(this.roleIds))
+      localStorage.setItem('permissions', JSON.stringify(this.permissions))
+      localStorage.setItem('roles', JSON.stringify(this.roles))
     },
 
     clearAuth() {
       this.token = ''
       this.refreshToken = ''
       this.user = null
-      this.memberships = []
       this.menuTree = []
       this.roleIds = []
+      this.permissions = []
+      this.roles = []
       localStorage.clear()
     }
   }

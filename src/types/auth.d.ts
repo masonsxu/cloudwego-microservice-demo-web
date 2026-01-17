@@ -1,6 +1,14 @@
 import type { BaseResponse, TokenInfo } from './api'
-import type { UserProfile, UserMembership } from './user'
-import type { MenuNode } from './menu'
+import type { UserProfile } from './user'
+import type { MenuNode, MenuPermission } from './menu'
+
+// 登录响应中的角色信息
+export interface LoginRole {
+  id: string
+  code: string | null
+  name: string
+  data_scope: number
+}
 
 export interface LoginRequest {
   username: string
@@ -10,9 +18,10 @@ export interface LoginRequest {
 export interface LoginResponse extends BaseResponse {
   token_info: TokenInfo
   user_profile: UserProfile
-  memberships: UserMembership[]
   menu_tree: MenuNode[]
   role_ids: string[]
+  permissions: MenuPermission[]
+  roles: LoginRole[]
 }
 
 export interface RefreshTokenRequest {

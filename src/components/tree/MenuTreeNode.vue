@@ -66,6 +66,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { MenuNode } from '@/types/menu'
+import { PermissionLevel, PERMISSION_LABEL_KEYS } from '@/constants/permission'
 
 const props = defineProps<{
   menu: MenuNode
@@ -89,30 +90,25 @@ const toggleExpand = () => {
   }
 }
 
-const getPermissionLevelClass = (level: string) => {
+const getPermissionLevelClass = (level?: PermissionLevel | string) => {
   switch (level) {
-    case 'full':
+    case PermissionLevel.FULL:
       return 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-green-200 dark:shadow-green-900'
-    case 'write':
+    case PermissionLevel.WRITE:
       return 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-blue-200 dark:shadow-blue-900'
-    case 'read':
+    case PermissionLevel.READ:
       return 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-amber-200 dark:shadow-amber-900'
     default:
       return 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
   }
 }
 
-const getPermissionLevelText = (level: string) => {
-  switch (level) {
-    case 'full':
-      return t('menuConfig.full')
-    case 'write':
-      return t('menuConfig.write')
-    case 'read':
-      return t('menuConfig.read')
-    default:
-      return t('menuConfig.none')
+const getPermissionLevelText = (level?: PermissionLevel | string) => {
+  if (!level) {
+    return t(PERMISSION_LABEL_KEYS[PermissionLevel.NONE])
   }
+  const labelKey = PERMISSION_LABEL_KEYS[level as PermissionLevel]
+  return labelKey ? t(labelKey) : t(PERMISSION_LABEL_KEYS[PermissionLevel.NONE])
 }
 
 // 检查图标是否是HTML字符串（包含标签）
